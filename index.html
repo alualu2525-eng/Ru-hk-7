@@ -19,28 +19,25 @@
         .route-step { border-left: 2px solid #334155; margin-left: 10px; padding-left: 18px; padding-bottom: 24px; position: relative; }
         .route-step::before { content: '📍'; position: absolute; left: -11px; top: 0; background: #020617; font-size: 14px; }
         .date-scroll::-webkit-scrollbar { display: none; }
-        .thumb-img { width: 100%; height: 80px; object-fit: cover; border-radius: 8px; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1); }
+        .thumb-img { width: 100%; height: 160px; object-fit: cover; border-radius: 12px; margin-top: 10px; border: 1px solid rgba(255,255,255,0.2); }
         .dashed-line { border-top: 1.5px dashed #cbd5e1; position: relative; width: 100%; margin: 6px 0; }
     </style>
 </head>
 <body>
     <div id="app" class="max-w-md mx-auto min-h-screen relative shadow-2xl bg-[#020617] pb-10">
         
-        <!-- Header: 香港夜景高清圖 -->
-        <header class="relative min-h-[450px] flex flex-col justify-start items-center text-center p-6 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1506351466446-9748283035a6?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-60">
+        <header class="relative min-h-[400px] flex flex-col justify-start items-center text-center p-6 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1506351466446-9748283035a6?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-70">
             <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-[#020617]"></div>
             
             <div class="relative z-10 w-full mt-4">
                 <h1 class="text-3xl font-black neon-text italic text-white tracking-tighter mb-4">2026 港澳吃喝<br>之小馬哥首航</h1>
                 <p class="text-lg text-blue-300 font-bold mb-6">小馬哥 . 小村 . 陳RuRu . Ruby . 妹妹</p>
 
-                <!-- 登機證風格航班資訊 (去程+回程) -->
                 <div class="space-y-3 w-full">
-                    <!-- 去程 -->
                     <div class="boarding-pass-home text-left relative overflow-hidden">
                         <div class="flex justify-between items-center mb-1">
-                            <span class="text-[10px] font-black text-blue-600 bg-blue-100 px-2 py-0.5 rounded">HB703 / T1</span>
+                            <span class="text-[10px] font-black text-blue-600 bg-blue-100 px-2 py-0.5 rounded">HB703 / T1 (去程)</span>
                             <span class="text-[10px] font-bold text-slate-500">2026/08/28</span>
                         </div>
                         <div class="flex justify-between items-center">
@@ -50,21 +47,6 @@
                                 <div class="dashed-line"></div>
                             </div>
                             <div class="text-right"><p class="text-xl font-black">HKG</p><p class="text-[10px]">13:30</p></div>
-                        </div>
-                    </div>
-                    <!-- 回程 -->
-                    <div class="boarding-pass-home text-left relative">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="text-[10px] font-black text-green-600 bg-green-100 px-2 py-0.5 rounded">JX206 / T1</span>
-                            <span class="text-[10px] font-bold text-slate-500">2026/08/30</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <div><p class="text-xl font-black">MFM</p><p class="text-[10px]">20:50</p></div>
-                            <div class="flex-1 px-4 text-center">
-                                <span class="text-xs">✈️</span>
-                                <div class="dashed-line"></div>
-                            </div>
-                            <div class="text-right"><p class="text-xl font-black">TPE</p><p class="text-[10px]">22:40</p></div>
                         </div>
                     </div>
                 </div>
@@ -79,7 +61,6 @@
         </nav>
 
         <main class="p-4">
-            <!-- 行程表分頁 -->
             <div v-if="currentTab === 'itinerary'">
                 <div class="date-scroll mb-6">
                     <div v-for="d in days" @click="selectedDay = d.id" :class="['date-item', selectedDay === d.id ? 'active' : 'bg-slate-800/50 text-slate-400']">
@@ -88,11 +69,11 @@
                     </div>
                 </div>
 
-                <!-- Day 1 行程 -->
                 <div v-if="selectedDay === 1" class="space-y-4">
                     <div class="route-step">
                         <h3 class="font-bold text-white">⏱️ 13:30 抵達香港機場 (HKG)</h3>
-                        <img src="https://images.unsplash.com/photo-1556388158-158ea5ccacbd?w=400&auto=format&fit=crop" class="thumb-img">
+                        <p class="text-[10px] text-slate-400 mt-1">入境、提領行李、購買/儲值八達通。</p>
+                        <img src="https://images.unsplash.com/photo-1556388158-158ea5ccacbd?w=600" class="thumb-img">
                     </div>
 
                     <div class="route-step">
@@ -101,13 +82,14 @@
                             <p>● 🚌 <span class="text-yellow-400">交通：</span>航站樓外搭 <span class="font-bold">S1 巴士</span>。</p>
                             <p>● 📍 <span class="text-yellow-400">地點：</span>「機場(地面運輸中心)」➔ 「東薈城」。</p>
                             <p>● 💰 <span class="text-yellow-400">費用：</span>HK$3.7 | ⏱️ 約 15 分鐘。</p>
+                            <p>● 备案：可搭計程車，約 HK$50-70。</p>
                         </div>
                     </div>
 
                     <div class="route-step">
-                        <h3 class="font-bold text-white">⏱️ 15:00 - 17:00 <a href="https://www.citygateoutlets.com.hk/" class="underline">東薈城購物</a></h3>
+                        <h3 class="font-bold text-white">⏱️ 15:00 - 17:00 東薈城購物 (10:00-22:00)</h3>
                         <p class="text-[10px] text-pink-400 mt-1 italic">※ 推薦逛 COACH，此處常有 Outlet 折扣。</p>
-                        <img src="https://lh5.googleusercontent.com/p/AF1QipN3-yvU0o52jH8S7k1h0G0oT0-L-uU0GvS-0nO2=w400-h200-k-no" class="thumb-img">
+                        <img src="https://www.citygateoutlets.com.hk/zh-hk/-/media/images/cgo/home/about-citygate-outlets/cgo_740x450_about-cgo.ashx" class="thumb-img">
                     </div>
 
                     <div class="route-step">
@@ -115,154 +97,189 @@
                         <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
                             <p>● 🚌 <span class="text-yellow-400">交通：</span>搭乘 <span class="font-bold text-blue-400">E31 (往荃灣)</span> 或 <span class="font-bold text-blue-400">E32 (往葵芳)</span>。</p>
                             <p>● 📍 <span class="text-yellow-400">站點：</span>「東薈城」➔ 「葵興站」。</p>
-                            <p>● 🚐 <span class="text-yellow-400">接駁：</span>轉飯店免費接駁巴士 (15-30分一班)。</p>
+                            <p>● 🚐 <span class="text-yellow-400">接駁：</span>轉飯店免費接駁巴士 (新葵興廣場 7-11 旁)。</p>
                             <p>● 💰 <span class="text-yellow-400">費用：</span>HK$10.8 | ⏱️ 約 45 分鐘。</p>
                         </div>
                     </div>
 
                     <div class="route-step">
-                        <h3 class="font-bold text-white">⏱️ 18:30 - 19:30 <a href="https://www.facebook.com/taipanshakmei/" class="underline">🍧 竺扶大班燒味</a></h3>
+                        <h3 class="font-bold text-white">⏱️ 18:30 - 19:30 🍧 竺扶大班燒味 (08:00-21:00)</h3>
                         <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
                             <p>● 🚇 <span class="text-yellow-400">交通：</span>葵興站搭地鐵荃灣線 ➔ 「金鐘站」轉港島線 ➔ <span class="font-bold text-blue-400">「灣仔站」A3 出口</span>。</p>
                             <p>● 💰 <span class="text-yellow-400">費用：</span>HK$15.0。</p>
                             <p>● 😋 <span class="text-pink-400">必點：</span>金牌厚切叉燒、脆皮燒肉。</p>
                         </div>
-                        <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?w=400&auto=format&fit=crop" class="thumb-img">
+                        <img src="https://static.wixstatic.com/media/786a60_57297926b680479da152430030589d81~mv2.jpg/v1/fill/w_640,h_480,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/786a60_57297926b680479da152430030589d81~mv2.jpg" class="thumb-img" alt="招牌叉燒">
                     </div>
 
                     <div class="route-step">
                         <h3 class="font-bold text-white">⏱️ 19:30 - 20:30 🚋 叮叮車 ➔ 半山手扶梯</h3>
                         <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
                             <p>● 🚋 <span class="text-yellow-400">路線：</span>莊士敦道搭乘 <span class="font-bold">叮叮車(西行)</span> ➔ 「租庇利街」下車。</p>
-                            <p>● 💰 <span class="text-yellow-400">費用：</span>HK$3.0。</p>
+                            <p>● 📍 <span class="text-yellow-400">景點：</span>感受中環夜晚霓虹燈火與世界最長手扶梯。</p>
                         </div>
+                        <img src="https://images.unsplash.com/photo-1604531124436-ec178970030e?w=600" class="thumb-img" alt="中環夜景">
                     </div>
 
                     <div class="route-step">
                         <h3 class="font-bold text-white">⏱️ 20:30 - 22:00 🚡 山頂纜車 ➔ 維港夜景</h3>
                         <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
-                            <p>● 🚡 <span class="text-yellow-400">行程：</span>搭纜車上山 ➔ 搭 <span class="font-bold">15號巴士</span> 下山回中環碼頭。</p>
-                            <p>● 💰 <span class="text-yellow-400">費用：</span>纜車來回 HK$108 | 15號巴士 HK$12.1。</p>
+                            <p>● 🚡 <span class="text-yellow-400">行程：</span>中環花園道搭纜車上山 ➔ 凌霄閣看夜景。</p>
+                            <p>● 🚌 <span class="text-yellow-400">回程：</span>搭 <span class="font-bold">15號巴士</span> 下山回中環碼頭。</p>
                         </div>
-                        <img src="https://images.unsplash.com/photo-1544413672-74730628351a?w=400&auto=format&fit=crop" class="thumb-img">
+                        <img src="https://images.unsplash.com/photo-1544413672-74730628351a?w=600" class="thumb-img" alt="維港夜景">
                     </div>
 
                     <div class="route-step">
                         <h3 class="font-bold text-white">⏱️ 22:00 - 00:00 🚢 天星小輪 ➔ 🍧 佳佳甜品</h3>
                         <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
                             <p>● 🚢 <span class="text-yellow-400">船程：</span>中環 ➔ 尖沙咀碼頭 (HK$5.0)。</p>
-                            <p>● 🚶 <span class="text-yellow-400">步行：</span>碼頭沿廣東道步行約 12 分鐘 ➔ 佳佳甜品。</p>
-                            <p>● 😋 <span class="text-pink-400">推薦：</span>芝麻糊、薑汁湯丸。</p>
+                            <p>● 🚶 <span class="text-yellow-400">步行：</span>碼頭沿廣東道/彌敦道步行約 12-15 分鐘。</p>
+                            <p>● 😋 <span class="text-pink-400">佳佳甜品(12:00-03:30)：</span>芝麻糊、薑汁湯丸。</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Day 2 行程 -->
                 <div v-if="selectedDay === 2" class="space-y-4">
                     <div class="route-step">
-                        <h3 class="font-bold text-white">⏱️ 10:00 退房 ➔ 🍧 一點心</h3>
+                        <h3 class="font-bold text-white">⏱️ 10:00 退房 ➔ 港澳快線門市寄行李</h3>
                         <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
-                            <p>● 🚇 <span class="text-yellow-400">路線：</span>葵興站 ➔ 「太子站」C2出口。</p>
-                            <p>● 😋 <span class="text-pink-400">必點：</span>薄皮鮮蝦餃、炸鮮奶。</p>
+                            <p>● 🚇 <span class="text-yellow-400">交通：</span>葵興站 ➔ 「太子站」C2出口。</p>
+                            <p>● 📍 <span class="text-yellow-400">寄放：</span>太子上海街695號A鋪「中港通門市」。</p>
+                            <p>● 🚶 <span class="text-yellow-400">步行：</span>步行約6分鐘抵達「一點心」。</p>
                         </div>
-                        <img src="https://images.unsplash.com/photo-1563245339-6b2e44c1037d?w=400&auto=format&fit=crop" class="thumb-img">
                     </div>
 
                     <div class="route-step">
-                        <h3 class="font-bold text-white">⏱️ 11:30 - 14:00 購物馬拉松</h3>
+                        <h3 class="font-bold text-white">⏱️ 10:30 - 11:30 🥟 一點心 (10:00-22:30)</h3>
                         <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
-                            <p>● 📍 <span class="font-bold text-blue-300">1. 兆成行：</span>買精油香氛。</p>
-                            <p>● 📍 <span class="font-bold text-blue-300">2. 珍妮曲奇：</span>必買四味奶油曲奇。</p>
-                            <p>● 📍 <span class="font-bold text-blue-300">3. 蘭芳園：</span>絲襪奶茶。</p>
+                            <p>● 😋 <span class="text-pink-400">必點：</span>薄皮鮮蝦餃、香煎蘿蔔糕、炸鮮奶。</p>
                         </div>
+                        <img src="https://lh3.googleusercontent.com/p/AF1QipN3fM3wB86G6nF2-t_3tM6R4n6E6n6E6n6E6n6E=s1360-w1360-h1020" class="thumb-img" alt="一點心招牌">
+                    </div>
+
+                    <div class="route-step">
+                        <h3 class="font-bold text-white">⏱️ 11:30 - 14:00 上環購物馬拉松</h3>
+                        <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
+                            <p>● 🚇 <span class="text-yellow-400">優化路線：</span></p>
+                            <p>1. <span class="font-bold text-blue-300">珍妮曲奇(10:00-19:00)：</span>上環永和街15號地舖。</p>
+                            <p>2. <span class="font-bold text-blue-300">兆成行(09:30-18:30)：</span>上環蘇杭街130號地舖。</p>
+                            <p>3. <span class="font-bold text-blue-300">蘭芳園(07:30-18:00)：</span>中環結志街2號(步行前往)。</p>
+                            <p>● 😋 <span class="text-pink-400">美食：</span>絲襪奶茶、西多士。</p>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1590510103004-42037965947a?w=600" class="thumb-img" alt="蘭芳園">
                     </div>
 
                     <div class="route-step">
                         <h3 class="font-bold text-white">⏱️ 14:30 - 17:30 🚌 港澳快線 (香港 ➔ 澳門)</h3>
                         <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
                             <p>● 🚌 <span class="text-yellow-400">上車：</span>太子上海街 695 號。</p>
-                            <p>● 📍 <span class="text-yellow-400">下車點：</span>「回力」站。</p>
-                            <p>● 💰 <span class="text-yellow-400">費用：</span>約 HK$180。</p>
+                            <p>● 📍 <span class="text-yellow-400">下車點：</span>選擇「回力」站下車。</p>
+                            <p>● 🚶 <span class="text-yellow-400">前往酒店：</span>步行 8-10 分鐘至 利澳酒店 (Rio Hotel)。</p>
+                            <p>● 备案：回力下車若行李多，搭計程車僅需起跳價。</p>
                         </div>
                     </div>
 
                     <div class="route-step">
-                        <h3 class="font-bold text-white">⏱️ 18:00 - 20:00 澳門古蹟巡禮</h3>
-                        <p class="text-[10px] text-slate-300 italic">大三巴 ➔ 最香餅家 ➔ 禮記雪糕。</p>
-                        <img src="https://images.unsplash.com/photo-1590510103004-42037965947a?w=400&auto=format&fit=crop" class="thumb-img">
+                        <h3 class="font-bold text-white">⏱️ 18:00 - 20:00 澳門古蹟與晚餐</h3>
+                        <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
+                            <p>● 🗺️ <span class="text-yellow-400">路線：</span>利澳 ➔ 大三巴 ➔ 最香餅家 ➔ 禮記雪糕。</p>
+                            <p>● 😋 <span class="text-pink-400">晚餐：</span>陳光記燒鵝 或 葡國美食天地。</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <img src="https://lh3.googleusercontent.com/p/AF1QipM-p-vA9-tZ_rW3tM6R4n6E6n6E6n6E6n6E=s1360-w1360-h1020" class="thumb-img h-32" alt="大三巴">
+                            <img src="https://lh3.googleusercontent.com/p/AF1QipM_Q6B6nF2-t_3tM6R4n6E6n6E6n6E6n6E6n6E=s1360-w1360-h1020" class="thumb-img h-32" alt="禮記雪糕">
+                        </div>
                     </div>
 
                     <div class="route-step">
-                        <h3 class="font-bold text-white">⏱️ 20:00 - 22:00 氹仔夜景 ➔ 🍧 杏香園</h3>
+                        <h3 class="font-bold text-white">⏱️ 20:00 - 22:30 氹仔夜景與輕軌體驗</h3>
                         <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
-                            <p>● 🚡 <span class="text-yellow-400">景點：</span>新濠影匯 8 字摩天輪、永利皇宮噴泉。</p>
-                            <p>● 😋 <span class="text-pink-400">必吃：</span>杏香園蛋白杏仁茶。</p>
+                            <p>● 🚕 <span class="text-yellow-400">交通：</span>搭巴士/發財車/計程車前往「新濠影匯」。</p>
+                            <p>● 🚡 <span class="text-yellow-400">行程：</span>8字摩天輪 ➔ 永利皇宮噴泉纜車。</p>
+                            <p>● 🚇 <span class="text-yellow-400">輕軌：</span>「路氹東站」➔ 「排角站」(逛官也街) ➔ 「杏香園」。</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Day 3 行程 -->
                 <div v-if="selectedDay === 3" class="space-y-4">
-                    <div class="route-step">
-                        <h3 class="font-bold text-white">⏱️ 10:00 退房 ➔ 🍧 世紀咖啡</h3>
-                        <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
-                            <p>● 😋 <span class="text-yellow-400">早餐：</span>厚蛋吐司、瓦煲奶茶。</p>
-                            <p>● 🥧 <span class="text-yellow-400">蛋塔：</span>安德魯 (官也街)。</p>
+                    <div class="boarding-pass-home text-left relative mb-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-[10px] font-black text-green-600 bg-green-100 px-2 py-0.5 rounded">JX206 / T1 (回程)</span>
+                            <span class="text-[10px] font-bold text-slate-500">2026/08/30</span>
                         </div>
-                        <img src="https://images.unsplash.com/photo-1632311746210-9b43d7890691?w=400&auto=format&fit=crop" class="thumb-img">
+                        <div class="flex justify-between items-center">
+                            <div><p class="text-xl font-black">MFM</p><p class="text-[10px]">20:50</p></div>
+                            <div class="flex-1 px-4 text-center">
+                                <span class="text-xs">✈️</span>
+                                <div class="dashed-line"></div>
+                            </div>
+                            <div class="text-right"><p class="text-xl font-black">TPE</p><p class="text-[10px]">22:40</p></div>
+                        </div>
                     </div>
 
                     <div class="route-step">
-                        <h3 class="font-bold text-white">⏱️ 12:00 - 15:00 🛍️ 威尼斯人 COACH 購物</h3>
-                        <p class="text-[10px] text-slate-300 italic">威尼斯人 T廣場，百貨公司折扣較多。</p>
+                        <h3 class="font-bold text-white">⏱️ 10:00 退房 ➔ 世紀咖啡 (10:00-18:00)</h3>
+                        <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
+                            <p>● 😋 <span class="text-pink-400">早餐：</span>厚蛋吐司、瓦煲奶茶。</p>
+                            <p>● 🚶 <span class="text-yellow-400">備案：</span>利澳酒店步行前往「瑪嘉烈蛋塔」(10分鐘)。</p>
+                        </div>
+                        <img src="https://lh3.googleusercontent.com/p/AF1QipM-p-vA9-tZ_rW3tM6R4n6E6n6E6n6E6n6E6n6E=s1360-w1360-h1020" class="thumb-img" alt="世紀咖啡厚蛋">
                     </div>
 
                     <div class="route-step">
-                        <h3 class="font-bold text-white">⏱️ 15:00 - 18:00 倫敦人巡禮</h3>
-                        <img src="https://images.unsplash.com/photo-1651829671180-2a868f00030d?w=400&auto=format&fit=crop" class="thumb-img">
+                        <h3 class="font-bold text-white">⏱️ 12:00 - 15:00 🛍️ 官也街與 COACH 購物</h3>
+                        <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
+                            <p>● 🥧 <span class="text-yellow-400">蛋塔：</span>安德魯 (官也街店，10:00-21:00)。</p>
+                            <p>● 👜 <span class="text-yellow-400">COACH：</span>威尼斯人 DFS T廣場 (經常促銷)。</p>
+                            <p>● 🚌 <span class="text-yellow-400">交通：</span>利用威尼斯人/銀河發財車往返。</p>
+                        </div>
                     </div>
 
                     <div class="route-step">
-                        <h3 class="font-bold text-white">⏱️ 19:30 抵達澳門機場 (MFM)</h3>
+                        <h3 class="font-bold text-white">⏱️ 15:00 - 18:00 倫敦人/威尼斯人巡禮</h3>
+                        <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
+                            <p>● 📸 <span class="text-yellow-400">打卡：</span>倫敦人大笨鐘、威尼斯人運河。</p>
+                            <p>● 🚶 <span class="text-yellow-400">步行：</span>路氹金光大道各酒店間皆有天橋/室內連通道。</p>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1651829671180-2a868f00030d?w=600" class="thumb-img" alt="澳門倫敦人">
+                    </div>
+
+                    <div class="route-step">
+                        <h3 class="font-bold text-white">⏱️ 18:00 - 19:30 補漏行程/晚餐</h3>
+                        <div class="glass-card p-3 rounded-lg mt-2 text-[11px] leading-relaxed">
+                            <p>● 📸 <span class="text-yellow-400">備案：</span>澳門塔下方觀景或巴黎人草坪前野餐。</p>
+                        </div>
+                    </div>
+
+                    <div class="route-step">
+                        <h3 class="font-bold text-white">⏱️ 19:30 抵達 澳門機場 (MFM)</h3>
+                        <p class="text-[10px] text-slate-400">搭乘發財車(威尼斯人/永利皇宮)直達機場。</p>
                     </div>
                 </div>
             </div>
 
-            <!-- 資訊分頁 -->
             <div v-if="currentTab === 'info'" class="space-y-4">
                 <div class="glass-card p-4 rounded-xl border-l-4 border-blue-500">
                     <h4 class="font-bold text-blue-400 mb-2">🏨 香港：旭逸飯店 · 荃灣</h4>
                     <p class="text-[11px]">📍 葵涌圳邊街15-19號</p>
-                    <p class="text-[11px] text-yellow-400 italic mt-1">💡 建議：新葵興廣場 7-11 旁搭接駁車最方便。</p>
+                    <p class="text-[11px] text-blue-300 mt-1">🔗 <a href="https://www.hotelease.com.hk/hotelease/zh-tw/shuttle_bus">接駁車時間表連結</a></p>
+                    <p class="text-[11px] text-yellow-400 italic mt-1">💡 建議：新葵興廣場 7-11 旁搭接駁車或步行 12 分鐘。</p>
                 </div>
                 
                 <div class="glass-card p-4 rounded-xl border-l-4 border-green-500">
                     <h4 class="font-bold text-green-400 mb-2">🏨 澳門：利澳酒店 (Rio Hotel)</h4>
                     <p class="text-[11px]">📍 澳門新口岸高美士街33號</p>
-                    <p class="text-[11px] text-yellow-400 italic mt-1">💡 建議：搭「回力」發財車下車後步行 8 分鐘可到。</p>
+                    <p class="text-[11px] text-yellow-400 italic mt-1">💡 交通：港澳快線「回力」站下車步行 8 分鐘。</p>
                 </div>
 
-                <div class="glass-card p-4 rounded-xl">
-                    <h4 class="font-bold text-pink-400 mb-3 text-sm">🕰️ 重點店家營業時間</h4>
-                    <div class="space-y-2 text-[11px]">
-                        <p>● <span class="font-bold">竺扶大班燒味：</span>08:00 - 21:00 (建議 18:00 前到避免叉燒賣完)</p>
-                        <p>● <span class="font-bold">佳佳甜品：</span>12:00 - 03:30 (宵夜場首選)</p>
-                        <p>● <span class="font-bold">一點心：</span>10:00 - 22:30 (一開門就去排隊，約等 20-40 分)</p>
-                        <p>● <span class="font-bold">珍妮曲奇：</span>10:00 - 19:00 (通常下午四點後品項不齊)</p>
-                        <p>● <span class="font-bold">世紀咖啡：</span>10:00 - 18:00 (官也街店，厚蛋必點)</p>
-                    </div>
-                </div>
-
-                <div class="glass-card p-4 rounded-xl">
-                    <h4 class="font-bold text-blue-300 mb-3 text-sm">🚐 發財車與輕軌攻略</h4>
-                    <div class="space-y-2 text-[11px]">
-                        <p>● <span class="text-blue-200">輕軌：</span>排角站直通官也街，路氹東站直通永利皇宮。</p>
-                        <p>● <span class="text-blue-200">威尼斯人：</span>發財車路線最廣，可利用其前往「橫琴口岸」或「港澳碼頭」轉乘。</p>
-                    </div>
+                <div class="glass-card p-4 rounded-xl border-l-4 border-purple-500">
+                    <h4 class="font-bold text-purple-400 mb-2">🚌 港澳跨海交通</h4>
+                    <p class="text-[11px]">📍 太子站上車點：上海街 695 號</p>
+                    <p class="text-[11px] text-blue-300 mt-1">🔗 <a href="https://hkmoexpress.gobybus.hk/">港澳快線訂票網址</a></p>
                 </div>
             </div>
 
-            <!-- 行李清單分頁 -->
             <div v-if="currentTab === 'list'" class="space-y-4">
                 <div v-for="(group, title) in detailedBaggage" class="glass-card p-4 rounded-2xl">
                     <h3 class="text-blue-400 font-bold mb-3 text-sm">📁 {{ title }}</h3>
@@ -273,25 +290,16 @@
                 </div>
             </div>
 
-            <!-- 攻略叮嚀分頁 -->
             <div v-if="currentTab === 'tips'" class="space-y-4">
                 <div class="glass-card p-5 rounded-2xl border-t-2 border-blue-500">
-                    <h4 class="font-bold text-blue-400 mb-3 italic text-base">📘 大師行程攻略</h4>
+                    <h4 class="font-bold text-blue-400 mb-3 italic text-base">📘 港澳交通進階攻略</h4>
                     <ul class="space-y-3 text-[11px] text-slate-300">
-                        <li>● <span class="font-bold text-white">【支付心法】</span>：香港以「八達通」與「AlipayHK」為主，澳門則可刷實體信用卡。路邊小店務必準備 <span class="text-yellow-400">HK$10/20 小面額現金</span>，不收千元鈔。</li>
-                        <li>● <span class="font-bold text-white">【購物叮嚀】</span>：東薈城 Outlet 的 COACH 雖然便宜，但新款都在海港城或澳門銀河。想買珍妮曲奇，上環店人比尖沙咀店少。</li>
-                        <li>● <span class="font-bold text-white">【交通密技】</span>：叮叮車是不分站別均一價，<span class="text-yellow-400">「後門上車、前門刷卡下車」</span>。山頂纜車建議提早於 Klook 買票，否則排隊會排到懷疑人生。</li>
-                        <li>● <span class="font-bold text-white">【過關須知】</span>：港澳快線過大橋時需全體下車過安檢，再上原車，貴重物品請隨身攜帶。</li>
-                    </ul>
-                </div>
-
-                <div class="glass-card p-5 rounded-2xl border-t-2 border-pink-500">
-                    <h4 class="font-bold text-pink-400 mb-3 italic text-base">⚠️ 注意事項與小提醒</h4>
-                    <ul class="space-y-3 text-[11px] text-slate-300">
-                        <li>● <span class="font-bold text-white">餐廳潛規則</span>：香港茶餐廳文化講求快，併桌是常態，若沒點飲料會被收「茶錢」。</li>
-                        <li>● <span class="font-bold text-white">溫差提醒</span>：室外雖熱，但商場與地鐵冷氣極強（像冷凍庫），<span class="text-pink-300">「薄外套」是救命丹</span>。</li>
-                        <li>● <span class="font-bold text-white">網路訊號</span>：部分地下地鐵站與大橋中段訊號較弱，建議先將行程圖下載離線使用。</li>
-                        <li>● <span class="font-bold text-white">環保袋</span>：香港超市與商店塑膠袋需付費（約 1 港幣），請自行攜帶購物袋。</li>
+                        <li>● <span class="font-bold text-white">【香港叮叮車】</span>：不分站別均一價，<span class="text-yellow-400">後門上車、前門刷卡下車</span>。</li>
+                        <li>● <span class="font-bold text-white">【澳門發財車】</span>：各大型酒店(威尼斯人、永利、新濠)都有免費巴士。即使不住宿也可搭乘，是省錢神技。</li>
+                        <li>● <span class="font-bold text-white">【步行策略】</span>：香港上環/中環坡度大，善用半山手扶梯；澳門古城區路窄人多，穿好走的鞋是必備。</li>
+                        <li>● <span class="font-bold text-white">【支付心法】</span>：香港八達通幾乎全能，澳門可刷信用卡，但建議準備少量 HK$10/20 現金給小店。</li>
+                        <li>● <span class="font-bold text-white">【港澳快線】</span>：過港珠澳大橋需全體下車過安檢，再上原車，貴重物品隨身拿。</li>
+                        <li>● <span class="font-bold text-white">【室內溫差】</span>：港澳冷氣世界知名強，<span class="text-pink-300">薄外套是救命丹</span>。</li>
                     </ul>
                 </div>
             </div>
@@ -311,11 +319,11 @@
                         { id: 3, week: '日', date: '8/30', weather: '31°C 局部雨' }
                     ],
                     detailedBaggage: {
-                        '證件與財物': ['護照 (效期6個月以上)', '台胞證 (或港簽)', '港幣現金 (大面額/小面額都要)', '實體信用卡 (國外回饋高者)', '八達通卡'],
-                        '電子產品': ['行動電源 (飛機禁托運)', '英標三腳轉接頭', '多孔充電頭', '充電線', 'SIM卡 / 漫遊確認'],
-                        '個人衣物': ['吸濕排汗衣物', '好穿耐走的運動鞋', '薄外套 (室內冷氣強)', '雨具 (摺疊傘/輕便雨衣)'],
-                        '衛生與藥品': ['胃藥 / 止瀉藥 / 止痛藥', '感冒藥 / 伏冒熱飲', '濕紙巾 / 面紙', '個人盥洗保養用品'],
-                        '必載APP': ['Google Maps', 'OpenRice (搵食必備)', 'MTR Mobile', 'Uber / 澳門電召']
+                        '證件與財物': ['護照 (效期6個月以上)', '台胞證 (或港簽)', '港幣現金', '實體信用卡', '八達通卡'],
+                        '電子產品': ['行動電源', '英標三腳轉接頭', '多孔充電頭', '充電線', 'SIM卡'],
+                        '個人衣物': ['吸濕排汗衣物', '好穿耐走的運動鞋', '薄外套 (室內冷氣強)', '雨具'],
+                        '衛生與藥品': ['胃藥 / 止瀉藥 / 止痛藥', '感冒藥', '濕紙巾', '個人盥洗保養用品'],
+                        '必載APP': ['Google Maps', 'OpenRice', 'MTR Mobile', 'Uber / 澳門電召']
                     }
                 }
             }
