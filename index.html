@@ -49,19 +49,19 @@
         </div>
 
         <div v-for="(item, idx) in currentItinerary" :key="item.id">
-            <div v-if="idx > 0" class="flex items-center gap-3 ml-6 my-6">
+            <div v-if="idx > 0 && item.type !== 'flight'" class="flex items-center gap-3 ml-6 my-6">
                 <div class="h-8 border-l-2 border-dashed border-gray-700"></div>
                 <div class="text-[11px] font-bold text-blue-400 bg-blue-900/20 px-3 py-1 rounded-full border border-blue-500/20">
                     ⏱️ {{ item.travelTime }} ({{ item.travelMethod }})
                 </div>
             </div>
 
-            <div v-if="item.type === 'flight'" class="boarding-pass p-6 shadow-xl">
+            <div v-if="item.type === 'flight'" class="boarding-pass p-6 shadow-xl mb-4">
                 <div class="flex justify-between items-center mb-6">
                     <span class="text-[10px] font-black text-blue-600 tracking-tighter">✈️ 登機證資訊</span>
                     <span class="font-black italic text-xl text-slate-800">{{ item.code }}</span>
                 </div>
-                <div class="flex justify-between items-center px-2">
+                <div class="flex justify-between items-center px-2 text-slate-900">
                     <div class="text-center"><h2 class="text-3xl font-black">{{ item.from }}</h2><p class="text-xs font-bold text-blue-600">{{ item.depTime }}</p></div>
                     <div class="flex-1 flex flex-col items-center px-4">
                         <span class="text-[10px] text-gray-400 font-bold uppercase">{{ item.duration }}</span>
@@ -93,7 +93,7 @@
         </div>
     </div>
 
-    <div v-if="activeTab === 'info'" class="p-6 space-y-6 animate-fadeIn">
+    <div v-if="activeTab === 'info'" class="p-6 space-y-6">
         <div class="card-glass p-6 rounded-3xl">
             <h4 class="text-blue-400 font-black mb-4 flex items-center gap-2 italic">🏨 飯店入住詳情</h4>
             <div class="space-y-4">
@@ -102,6 +102,7 @@
                     <p class="text-xs text-gray-400 mt-1 italic">Hotel Ease Tsuen Wan</p>
                     <p class="text-xs text-blue-300 mt-3 font-medium">📍 葵涌圳邊街15-19號</p>
                     <p class="text-[10px] text-gray-500 mt-1 leading-relaxed">🚇 近葵興站 (需搭飯店免費接駁車，約 5-10 分鐘一班)</p>
+                    <p class="text-[10px] text-yellow-500/80 mt-1">💡 穿梭巴士站：新葵興廣場 (近葵興站 A 出口 7-11 旁)</p>
                 </div>
                 <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
                     <p class="font-bold text-white text-lg">🇲🇴 利澳酒店</p>
@@ -123,24 +124,13 @@
                     </tr>
                 </thead>
                 <tbody class="text-gray-300">
-                    <tr class="border-b border-gray-800/50">
-                        <td class="py-3">🚌 S1 巴士</td><td>HK$3.7</td><td>HK$18.5</td>
-                    </tr>
-                    <tr class="border-b border-gray-800/50">
-                        <td class="py-3">🚌 E32 巴士</td><td>HK$10.8</td><td>HK$54.0</td>
-                    </tr>
-                    <tr class="border-b border-gray-800/50">
-                        <td class="py-3">🚋 叮叮車</td><td>HK$3.0</td><td>HK$15.0</td>
-                    </tr>
-                    <tr class="border-b border-gray-800/50">
-                        <td class="py-3">🚢 天星小輪</td><td>HK$5.0</td><td>HK$25.0</td>
-                    </tr>
-                    <tr class="border-b border-gray-800/50">
-                        <td class="py-3">🚡 山頂纜車</td><td>HK$108</td><td>HK$540</td>
-                    </tr>
-                    <tr>
-                        <td class="py-3">🚌 澳門巴士</td><td>MOP 6</td><td>MOP 30</td>
-                    </tr>
+                    <tr class="border-b border-gray-800/50"><td class="py-3">🚌 S1 巴士</td><td>HK$3.7</td><td>HK$18.5</td></tr>
+                    <tr class="border-b border-gray-800/50"><td class="py-3">🚌 E32 巴士</td><td>HK$10.8</td><td>HK$54.0</td></tr>
+                    <tr class="border-b border-gray-800/50"><td class="py-3">🚋 叮叮車</td><td>HK$3.0</td><td>HK$15.0</td></tr>
+                    <tr class="border-b border-gray-800/50"><td class="py-3">🚢 天星小輪</td><td>HK$5.0</td><td>HK$25.0</td></tr>
+                    <tr class="border-b border-gray-800/50"><td class="py-3">🚡 山頂纜車</td><td>HK$108</td><td>HK$540</td></tr>
+                    <tr class="border-b border-gray-800/50"><td class="py-3">🚌 港澳快線</td><td>HK$180</td><td>HK$900</td></tr>
+                    <tr><td class="py-3">🚌 澳門巴士</td><td>MOP 6</td><td>MOP 30</td></tr>
                 </tbody>
             </table>
         </div>
@@ -164,11 +154,12 @@
 
         <div class="card-glass p-5 rounded-3xl border-dashed border-pink-500/30">
             <h4 class="text-yellow-500 font-black text-sm mb-2 italic">⚠️ 行前最後提醒</h4>
-            <p class="text-[11px] text-gray-400 leading-relaxed">
-                1. 檢查八達通是否還有餘額。<br>
-                2. 確認 5 人是否都已完成線上入境申報 (香港)。<br>
-                3. 確認英規轉接頭帶了至少 2-3 個。
-            </p>
+            <div class="text-[11px] text-gray-400 space-y-2">
+                <p>1. 檢查八達通是否還有餘額。</p>
+                <p>2. 確認 5 人是否都已完成線上入境申報 (香港)。</p>
+                <p>3. 確認英規轉接頭帶了至少 2-3 個。</p>
+                <p>4. 準備好港澳快線 QR Code 截圖。</p>
+            </div>
         </div>
     </div>
 </div>
@@ -193,12 +184,13 @@ createApp({
             { date: "30", week: "AUG (日)" }
         ];
 
+        // 恢復完整的行李清單與備註
         const luggageList = [
             { name: "護照與簽證 (彩色印本)", note: "5人份需收齊於隨身袋" },
-            { name: "英規三腳轉接頭", note: "飯店插座為三個方孔" },
+            { name: "英規三腳轉接頭", note: "飯店插座為三個方孔，建議帶 2-3 個" },
             { name: "八達通 / 澳門通", note: "內需儲值至少 HKD 100" },
-            { name: "舒適球鞋 (非新鞋)", note: "Day 2 太子行程步行量極大" },
-            { name: "行動電源 (10000mAh+)", note: "需帶上飛機，不可託運" },
+            { name: "舒適球鞋 (非新鞋)", note: "Day 2 太子行程步行量極大，勿穿新鞋" },
+            { name: "行動電源 (10000mAh+)", note: "需隨身攜帶上飛機，不可託運" },
             { name: "常備胃藥與止痛藥", note: "吃喝團必備，防止水土不服" },
             { name: "空的收納大袋子", note: "Day 2 買珍妮曲奇與兆成行使用" }
         ];
@@ -206,28 +198,28 @@ createApp({
         const itineraryData = ref([
             // DAY 1
             { id: 1, day: 0, type: 'flight', code: '✈️ HB703', from: 'TPE', to: 'HKG', depTime: '11:30', arrTime: '13:30', duration: '2h 0m' },
-            { id: 2, day: 0, time: '14:30', icon: '🚌', title: '機場 ➔ 東薈城 Outlet', mapUrl: 'https://www.google.com/maps/search/Citygate+Outlets', travelTime: '15分', travelMethod: '🚌 S1 巴士', steps: ["👣 抵達後跟隨「地面運輸中心」指標走", "🚌 尋找 S1 循環巴士站牌", "🏁 車程 15 分鐘，於「東薈城」下車即達"], cost: "💰 HK$3.7" },
-            { id: 3, day: 0, time: '17:00', icon: '🏨', title: '東薈城 ➔ 旭逸酒店荃灣', mapUrl: 'https://www.google.com/maps/search/Hotel+Ease+Tsuen+Wan', travelTime: '45分', travelMethod: '🚌 E32 巴士', steps: ["👣 回到東薈城地下巴士總站", "🚌 搭乘 E32 (往葵芳方向)", "🚇 於「葵興站」下車 (終點)", "🚐 找新葵興廣場 7-11 旁的「酒店接駁車」"], cost: "💰 HK$10.8" },
-            { id: 4, day: 0, time: '18:30', icon: '🍖', title: '竺扶大班燒味', mapUrl: 'https://www.google.com/maps/search/竺扶大班燒味', travelTime: '35分', travelMethod: '🚇 地鐵', steps: ["🚇 葵興站搭「荃灣線(紅)」至金鐘", "🚇 轉「港島線(藍)」至灣仔站 A3 出口", "👣 出口左轉沿莊士敦道直走", "🍖 進入三角街抵達"], recommend: "🍽️ 厚切叉燒、脆皮燒肉" },
-            { id: 5, day: 0, time: '19:30', icon: '🚋', title: '叮叮車 ➔ 半山手扶梯', mapUrl: 'https://www.google.com/maps/search/Mid-Levels+Escalators', travelTime: '15分', travelMethod: '🚋 叮叮車', steps: ["👣 走到門口莊士敦道搭乘「西行」電車", "🚋 於「租庇利街」站下車", "👣 沿著指標步行進入手扶梯區域"], cost: "💰 HK$3.0" },
-            { id: 6, day: 0, time: '20:30', icon: '🚡', title: '山頂纜車 ➔ 太平山頂', mapUrl: 'https://www.google.com/maps/search/Peak+Tram', travelTime: '40分', travelMethod: '🚡 纜車', steps: ["👣 步行 15 分鐘至花園道纜車站", "🚡 搭乘第六代纜車上山 (坐右邊)", "🚌 下山改搭 15 號巴士回中環碼頭"], cost: "💰 HK$108" },
-            { id: 7, day: 0, time: '22:00', icon: '🚢', title: '天星小輪 ➔ 佳佳甜品', mapUrl: 'https://www.google.com/maps/search/佳佳甜品', travelTime: '25分', travelMethod: '🚢 渡輪 + 👣', steps: ["🚢 中環碼頭搭小輪至尖沙咀", "👣 沿廣東道直行 12 分鐘至寧波街", "🍧 抵達佳佳甜品吃宵夜"], recommend: "🍧 芝麻糊、湯丸" },
+            { id: 2, day: 0, time: '14:30', icon: '🚌', title: '機場 ➔ 東薈城 Outlet', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Citygate+Outlets', travelTime: '15分', travelMethod: '🚌 S1 巴士', steps: ["👣 抵達領行李後，跟隨「地面運輸中心」指標走", "🚌 尋找「S1」循環巴士站牌 (往東涌方向)", "🏁 車程 15 分鐘，於「東薈城」總站下車即達"], cost: "💰 HK$3.7" },
+            { id: 3, day: 0, time: '17:00', icon: '🏨', title: '東薈城 ➔ 旭逸酒店荃灣', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Hotel+Ease+Tsuen+Wan', travelTime: '45分', travelMethod: '🚌 E32 巴士', steps: ["👣 走回下車時的東薈城地下巴士總站", "🚌 搭乘 E32 (往葵芳方向)", "🚇 於「葵興站」下車 (終點站)", "🚐 尋找新葵興廣場 7-11 旁的「酒店接駁車」入口"], cost: "💰 HK$10.8" },
+            { id: 4, day: 0, time: '18:30', icon: '🍖', title: '竺扶大班燒味', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Chu+Foo+Tai+Pan+Roasted+Meat', travelTime: '35分', travelMethod: '🚇 地鐵', steps: ["🚇 葵興站搭「紅線」至金鐘，轉「藍線」至灣仔站", "🚇 走 A3 出口，出站後左轉沿「莊士敦道」直行", "🍖 看到「三角街」路口左轉進入即抵達"], recommend: "🍽️ 厚切叉燒、脆皮燒肉" },
+            { id: 5, day: 0, time: '19:30', icon: '🚋', title: '叮叮車 ➔ 半山手扶梯', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Central+Mid-Levels+Escalator', travelTime: '15分', travelMethod: '🚋 叮叮車', steps: ["👣 走到莊士敦道大街，尋找「巴路士街」電車站", "🚋 搭乘往「中環/西環」方向的西行電車", "🚋 於「租庇利街 25W」站下車 (中環街市旁)", "👣 沿指標步行進入手扶梯區域"], cost: "💰 HK$3.0" },
+            { id: 6, day: 0, time: '20:30', icon: '🚡', title: '山頂纜車 ➔ 太平山頂', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Peak+Tram+Terminal', travelTime: '40分', travelMethod: '🚡 纜車', steps: ["👣 步行 15 分鐘至「花園道纜車站」", "🚡 搭乘第六代纜車上山 (坐右邊景觀較好)", "⛰️ 抵達凌霄閣，建議看完夜景搭 15 號巴士下山"], cost: "💰 HK$108" },
+            { id: 7, day: 0, time: '22:00', icon: '🚢', title: '天星小輪 ➔ 佳佳甜品', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Kai+Kai+Dessert', travelTime: '25分', travelMethod: '🚢 渡輪 + 👣', steps: ["🚢 從中環碼頭搭小輪至尖沙咀 (感受維港夜景)", "👣 沿廣東道直行 12 分鐘至寧波街", "🍧 抵達佳佳甜品吃宵夜 (芝麻糊、湯丸)"], recommend: "🍧 芝麻糊、湯丸" },
 
             // DAY 2
-            { id: 8, day: 1, time: '10:00', icon: '🥟', title: '寄行李 ➔ 一點心', mapUrl: 'https://www.google.com/maps/search/一點心', travelTime: '25分', travelMethod: '🚇 地鐵', steps: ["🚇 葵興站搭至太子站", "🧳 C2 出口步行至上海街695號寄行李", "🥟 步行 5 分鐘吃一點心"], recommend: "🍽️ 蝦餃、炸鮮奶" },
-            { id: 9, day: 1, time: '11:30', icon: '🛍️', title: '上環購物巡禮', mapUrl: 'https://www.google.com/maps/search/上環兆成行', travelTime: '40分', travelMethod: '🚇 地鐵', steps: ["🚇 太子站搭至上環站 E2 出口", "🛍️ 買兆成行精油 ➔ 永和街珍妮曲奇", "☕ 步行至蘭芳園買奶茶"] },
-            { id: 10, day: 1, time: '14:30', icon: '🇲🇴', title: '港澳快線 ➔ 澳門利澳酒店', mapUrl: 'https://www.google.com/maps/search/Rio+Hotel+Macau', travelTime: '3小時', travelMethod: '🚌 跨境巴士', steps: ["👣 14:15 前回到太子上海街門市報到", "🚌 搭車前往澳門「回力」站", "👣 面向大馬路右轉，直行 8 分抵飯店"], cost: "💰 HK$180" },
-            { id: 11, day: 1, time: '18:00', icon: '🏛️', title: '最香餅家 ➔ 大三巴', mapUrl: 'https://www.google.com/maps/search/Ruins+of+St.+Pauls', travelTime: '20分', travelMethod: '🚌 巴士', steps: ["🚌 酒店搭 3 號巴士至「新馬路」", "🍪 步行至清平巷買最香杏仁餅", "🏛️ 漫步大三巴夜色，晚餐吃陳光記"], recommend: "🍽️ 陳光記黑椒燒鵝" },
-            { id: 12, day: 1, time: '20:30', icon: '🚡', title: '路氹夜景 ➔ 永利纜車', mapUrl: 'https://www.google.com/maps/search/永利皇宮纜車', travelTime: '40分', travelMethod: '🚌 巴士', steps: ["🚌 亞馬喇前地搭 21A/26A 至新濠影匯", "📸 拍 8 字摩天輪，步行至永利皇宮", "🚡 搭乘觀光纜車看噴泉秀"] },
-            { id: 13, day: 1, time: '22:00', icon: '🍧', title: '杏香櫞甜品 ➔ 回酒店', mapUrl: 'https://www.google.com/maps/search/杏香櫞甜品', travelTime: '30分', travelMethod: '🚌 巴士 + 👣', steps: ["🚌 從永利搭巴士回「新馬路」站", "👣 步行至清平直街吃甜品", "🚌 門口搭 3 號車回「東方拱門」站", "🏁 步行 5 分鐘回利澳酒店入睡"], recommend: "🍧 核桃露、馬蹄沙" },
+            { id: 8, day: 1, time: '10:00', icon: ' dumpling', title: '寄行李 ➔ 一點心', mapUrl: 'https://www.google.com/maps/search/?api=1&query=One+Dim+Sum', travelTime: '25分', travelMethod: '🚇 地鐵', steps: ["🚇 葵興站搭紅線至「太子站」", "🧳 走 C2 出口步行至「上海街 695 號」寄行李", "🥟 步行 5 分鐘往運動場道吃一點心"], recommend: "🍽️ 蝦餃、炸鮮奶" },
+            { id: 9, day: 1, time: '11:30', icon: '🛍️', title: '上環購物：兆成行+珍妮曲奇', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Jenny+Bakery+Sheung+Wan', travelTime: '40分', travelMethod: '🚇 地鐵', steps: ["🚇 太子站搭至「上環站」E2 出口", "🛍️ 買兆成行精油 (蘇杭街) ➔ 永和街珍妮曲奇", "☕ 步行至蘭芳園買奶茶 (若有時間)"] },
+            { id: 10, day: 1, time: '14:30', icon: '🇲🇴', title: '港澳快線 ➔ 澳門利澳酒店', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Rio+Hotel+Macau', travelTime: '3小時', travelMethod: '🚌 跨境巴士', steps: ["👣 14:15 前回到太子上海街門市報到領行李", "🚌 搭跨境巴士經大橋前往澳門「回力」站", "👣 回力下車後右轉沿高美士街直行 8 分抵飯店"], cost: "💰 HK$180" },
+            { id: 11, day: 1, time: '18:00', icon: '🏛️', title: '最香餅家 ➔ 大三巴夜色', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Ruins+of+St.+Paul', travelTime: '20分', travelMethod: '🚌 巴士', steps: ["🚌 飯店門口搭 3 號巴士至「新馬路」站", "🍪 步行至清平巷買「最香杏仁餅」", "🏛️ 漫步大三巴，晚餐吃陳光記黑椒燒鵝"], recommend: "🍽️ 陳光記黑椒燒鵝" },
+            { id: 12, day: 1, time: '20:30', icon: '🚡', title: '永利皇宮噴泉纜車', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Wynn+Palace+Performance+Lake', travelTime: '40分', travelMethod: '🚌 巴士', steps: ["🚌 亞馬喇前地搭 21A/26A 至「新濠影匯」", "📸 拍路氹夜景，步行至永利皇宮", "🚡 免費搭乘觀光纜車看噴泉秀"] },
+            { id: 13, day: 1, time: '22:00', icon: '🍧', title: '杏香櫞甜品 ➔ 回酒店', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Hang+Heong+Un', travelTime: '30分', travelMethod: '🚌 巴士 + 👣', steps: ["🚌 從永利搭巴士回「新馬路」站", "👣 步行至清平直街吃甜品 (核桃露)", "🚌 門口搭 3 號車回「東方拱門」站", "🏁 步行 5 分鐘回飯店入睡"], recommend: "🍧 核桃露、馬蹄沙" },
 
-            // DAY 3
-            { id: 14, day: 2, time: '10:00', icon: '🛎️', title: '退房 ➔ 酒店寄行李', mapUrl: 'https://www.google.com/maps/search/Rio+Hotel+Macau+Lobby', travelTime: '10分', travelMethod: '🏨 櫃檯', steps: ["🛎️ 飯店辦理 Check-out", "🧳 告知櫃檯要 Store Luggage (拿憑證)", "🏁 領完憑證後直接出門"], luggage: "🧳 暫存利澳酒店" },
-            { id: 15, day: 2, time: '10:30', icon: '☕', title: '世紀咖啡 (早午餐)', mapUrl: 'https://www.google.com/maps/search/世紀咖啡官也街', travelTime: '30分', travelMethod: '🚌 巴士', steps: ["🚌 酒店門口搭巴士前往官也街", "🥪 吃厚蛋豬扒包，買安德魯蛋塔", "🛍️ 官也街買手信伴手禮"] },
-            { id: 16, day: 2, time: '14:00', icon: '🏰', title: '倫敦人 ➔ 巴黎人', mapUrl: 'https://www.google.com/maps/search/The+Londoner+Macao', travelTime: '15分', travelMethod: '👣 步行', steps: ["📸 倫敦人拍大笨鐘與紅色巴士", "🗼 步行前往巴黎人鐵塔草坪拍全景"] },
-            { id: 17, day: 2, time: '17:30', icon: '🚌', title: '回酒店領行李', mapUrl: 'https://www.google.com/maps/search/Rio+Hotel+Macau', travelTime: '40分', travelMethod: '🚐 發財車', steps: ["🚐 巴黎人找往「外港客運碼頭」接駁車", "🚐 碼頭下車轉搭 3 號巴士回飯店", "🧳 憑證拿回大件行李"], luggage: "🧳 取回所有行李" },
-            { id: 18, day: 2, time: '18:30', icon: '✈️', title: '前往機場 (MFM)', mapUrl: 'https://www.google.com/maps/search/Macau+Airport', travelTime: '30分', travelMethod: '🚌 AP1 巴士', steps: ["👣 提行李步行至巴士站", "🚌 搭乘 AP1 機場快線", "🏁 抵達機場出發層報到"], cost: "💰 MOP 6" },
-            { id: 19, day: 2, type: 'flight', code: '✈️ JX206', from: 'MFM', to: 'TPE', depTime: '20:50', arrTime: '22:40', duration: '1h 50m' }
+            // DAY 3 (航班資訊置頂)
+            { id: 19, day: 2, type: 'flight', code: '✈️ JX206', from: 'MFM', to: 'TPE', depTime: '20:50', arrTime: '22:40', duration: '1h 50m' },
+            { id: 14, day: 2, time: '10:00', icon: '🛎️', title: '退房 ➔ 酒店寄行李', mapUrl: '#', travelTime: '10分', travelMethod: '🏨 櫃檯', steps: ["🛎️ 飯店辦理 Check-out", "🧳 告知櫃檯 Store Luggage (領取行李憑證)", "🏁 確認憑證收好，出門去官也街"], luggage: "🧳 暫存利澳酒店" },
+            { id: 15, day: 2, time: '10:30', icon: '☕', title: '官也街 (世紀咖啡)', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Rua+do+Cunha', travelTime: '30分', travelMethod: '🚌 巴士', steps: ["🚌 飯店門口搭巴士前往「官也街」", "🥪 吃厚蛋豬扒包，買安德魯蛋塔", "🛍️ 購買伴手禮與手信"], recommend: "🍽️ 豬扒包、蛋塔" },
+            { id: 16, day: 2, time: '14:00', icon: '🏰', title: '倫敦人 ➔ 巴黎人美拍', mapUrl: '#', travelTime: '15分', travelMethod: '👣 步行', steps: ["📸 倫敦人拍大笨鐘與紅色巴士", "🗼 步行前往巴黎人鐵塔草坪拍全景", "📸 威尼斯人大運河逛街"] },
+            { id: 17, day: 2, time: '17:30', icon: '🚌', title: '重要：回酒店取行李', mapUrl: '#', travelTime: '40分', travelMethod: '🚐 接駁車/巴士', steps: ["🚐 巴黎人搭「外港客運碼頭」免費接駁車", "🚐 抵達碼頭後轉搭 3 號巴士", "🚇 於「東方拱門」站下車回飯店", "🧳 憑行李憑證取回 5 人大件行李"], luggage: "🧳 取回所有行李" },
+            { id: 18, day: 2, time: '18:30', icon: '✈️', title: '前往澳門機場 (MFM)', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Macau+International+Airport', travelTime: '30分', travelMethod: '🚌 AP1 巴士', steps: ["👣 提行李步行至巴士站 (東方拱門站)", "🚌 搭乘 AP1 機場快線", "🏁 抵達機場出發層辦理報到"], cost: "💰 MOP 6" }
         ]);
 
         const currentItinerary = computed(() => itineraryData.value.filter(i => i.day === selectedDay.value));
