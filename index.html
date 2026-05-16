@@ -1,303 +1,1017 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026港澳吃喝團之小馬哥首航</title>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
-        body { font-family: 'Noto Sans TC', sans-serif; background: #0d1117; color: #e6edf3; overflow-x: hidden; scroll-behavior: smooth; }
-        .card-glass { background: rgba(33, 38, 45, 0.9); backdrop-filter: blur(12px); border: 1px solid rgba(240, 246, 252, 0.1); }
-        .neon-pink { text-shadow: 0 0 10px rgba(255, 105, 180, 0.8); color: #ff69b4; }
-        .tab-active { color: #58a6ff; border-bottom: 3px solid #58a6ff; font-weight: 900; }
-        .step-node { position: relative; padding-left: 32px; margin-bottom: 16px; font-size: 13px; line-height: 1.6; }
-        .step-node::before { content: '📍'; position: absolute; left: 0; top: 2px; }
-        .step-line::after { content: ''; position: absolute; left: 11px; top: 26px; bottom: -16px; width: 2px; background: rgba(88, 166, 255, 0.2); }
-        .boarding-pass { background: white; color: #1e293b; border-radius: 20px; position: relative; overflow: hidden; }
-        .boarding-pass::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-bottom: 2px dashed #cbd5e1; }
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 10px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>2026港澳吃喝團之小馬哥首航</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink:#ff69b4;--gold:#d4a017;--darker:#0f0f1a;--dark:#1a1a2e;
+  --card:#16213e;--card2:#1a2540;--text:#e8e8f0;--muted:#7a8baa;
+  --accent:#4fc3f7;--green:#43e097;--orange:#ff7043;--red:#e53935;
+  --nav-h:62px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--darker);color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:15px;overflow-x:hidden;padding-bottom:var(--nav-h);}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(160deg,#08080f,#1a1a2e 50%,#1e0818);padding:28px 18px 18px;text-align:center;position:relative;border-bottom:1px solid #ffffff15;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 65% 5%,#ff69b428,transparent 60%),radial-gradient(ellipse at 15% 95%,#4fc3f710,transparent 50%);pointer-events:none;}
+.trip-title{font-size:28px;font-weight:900;color:var(--pink);letter-spacing:2px;line-height:1.35;text-shadow:0 0 8px #ff69b4,0 0 24px #ff1493,0 0 48px #c2185b55;position:relative;}
+.trip-sub{font-size:12px;color:var(--gold);margin-top:6px;letter-spacing:3px;text-transform:uppercase;position:relative;}
+.members{display:flex;justify-content:center;gap:5px;margin-top:10px;flex-wrap:wrap;position:relative;}
+.member-tag{background:#ff69b415;border:1px solid #ff69b430;border-radius:20px;padding:3px 11px;font-size:12px;color:#ffb3d9;}
+
+/* ── FLIGHT STRIP ── */
+.flight-strip{display:flex;gap:8px;padding:12px 14px;background:#0c0c18;border-bottom:1px solid #ffffff10;overflow-x:auto;}
+.flight-strip::-webkit-scrollbar{display:none;}
+.flight-card{background:linear-gradient(135deg,#1e2a4a,#16213e);border:1px solid #4fc3f730;border-radius:12px;padding:11px 14px;min-width:230px;flex-shrink:0;}
+.flight-label{font-size:10px;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.flight-row{display:flex;align-items:center;gap:8px;}
+.flight-city{font-size:22px;font-weight:900;color:#fff;}
+.flight-time{font-size:11px;color:var(--muted);margin-top:1px;}
+.flight-arrow{flex:1;text-align:center;color:var(--gold);font-size:16px;}
+.flight-no{font-size:11px;color:var(--gold);margin-top:5px;font-weight:700;}
+
+/* ── PAGES ── */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ── DAY TABS ── */
+.day-tab-nav{display:flex;background:#0c0c18;border-bottom:1px solid #ffffff10;position:sticky;top:0;z-index:50;}
+.day-tab{flex:1;padding:9px 4px;text-align:center;font-size:10px;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;font-family:'Noto Sans TC',sans-serif;background:none;border-top:none;border-left:none;border-right:none;}
+.day-tab.active{color:var(--pink);border-bottom-color:var(--pink);}
+.day-tab .dt{font-size:14px;font-weight:900;display:block;color:inherit;}
+.day-tab .dd{font-size:9px;display:block;margin-top:1px;}
+.day-content{display:none;padding:13px;}
+.day-content.active{display:block;}
+
+/* ── SECTION LABEL ── */
+.sec-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:4px 0 10px;display:flex;align-items:center;gap:8px;}
+.sec-lbl::after{content:'';flex:1;height:1px;background:#ffffff15;}
+
+/* ── COLLAPSIBLE ── */
+.coll{margin-bottom:9px;border-radius:12px;overflow:hidden;border:1px solid #ffffff10;}
+.coll-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;cursor:pointer;font-size:13px;font-weight:700;background:var(--card);user-select:none;}
+.coll-bd{display:none;padding:11px 13px;background:#111c33;}
+.coll-bd.open{display:block;}
+.tog{font-size:10px;color:var(--muted);transition:transform .25s;display:inline-block;}
+.tog.open{transform:rotate(180deg);}
+
+/* ── WEATHER ── */
+.w-main{display:flex;align-items:center;gap:12px;margin-bottom:9px;}
+.w-icon{font-size:30px;}
+.w-temp{font-size:22px;font-weight:900;color:#fff;}
+.w-feels{font-size:11px;color:var(--muted);margin-top:2px;}
+.w-desc{font-size:12px;color:var(--text);margin-top:2px;}
+.w-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-top:7px;}
+.w-stat{background:#ffffff08;border-radius:8px;padding:5px;text-align:center;}
+.wsi{font-size:13px;}.wsl{font-size:9px;color:var(--muted);margin-top:1px;}.wsv{font-size:11px;font-weight:700;}
+.w-alert{background:#c0392b18;border:1px solid #c0392b44;border-radius:8px;padding:7px 10px;font-size:12px;color:#e57373;margin-top:7px;line-height:1.5;}
+.w-alert.mild{background:#d4a01718;border-color:#d4a01744;color:var(--gold);}
+.w-tips{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px;}
+.w-tip{background:#4fc3f715;border:1px solid #4fc3f730;border-radius:20px;padding:3px 8px;font-size:11px;color:var(--accent);}
+.w-src{font-size:10px;color:var(--muted);margin-top:7px;text-align:right;}
+.w-src a{color:var(--accent);text-decoration:none;}
+
+/* ── BUDGET ── */
+.b-row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);padding:5px 0;border-bottom:1px solid #ffffff08;}
+.b-row:last-child{border-bottom:none;}
+.bv{color:var(--gold);font-weight:700;}
+.b-total{display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:#fff;margin-top:8px;padding-top:8px;border-top:1px solid #ffffff20;}
+.b-total .bv{color:var(--green);}
+.b-note{font-size:11px;color:var(--muted);margin-top:7px;}
+
+/* ── TIMELINE ── */
+.timeline{position:relative;}
+.timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--pink),var(--accent),var(--green));opacity:.22;}
+.tl-item{display:flex;gap:11px;margin-bottom:13px;position:relative;animation:fu .3s ease both;}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.tl-item:nth-child(1){animation-delay:.04s}.tl-item:nth-child(2){animation-delay:.08s}.tl-item:nth-child(3){animation-delay:.12s}
+.tl-item:nth-child(4){animation-delay:.16s}.tl-item:nth-child(5){animation-delay:.20s}.tl-item:nth-child(6){animation-delay:.24s}
+.tl-item:nth-child(7){animation-delay:.28s}.tl-item:nth-child(8){animation-delay:.32s}.tl-item:nth-child(9){animation-delay:.36s}
+.tl-item:nth-child(10){animation-delay:.40s}
+.tl-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;z-index:1;border:2px solid #ffffff12;}
+.tr{background:#1a3558;}.fd{background:#3a1c1c;}.ht{background:#1a3828;}.at{background:#2a1c3a;}
+.tl-body{flex:1;}
+.tl-time{font-size:12px;color:var(--gold);font-weight:700;letter-spacing:1px;margin-bottom:4px;}
+.tl-card{background:var(--card);border-radius:13px;padding:13px;border:1px solid #ffffff0c;}
+.tl-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px;gap:6px;}
+.tl-title{font-size:16px;font-weight:900;color:#fff;line-height:1.3;}
+.bdg{border-radius:20px;padding:3px 9px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;}
+.bdg-g{background:#d4a01720;border:1px solid #d4a01740;color:var(--gold);}
+.bdg-gr{background:#43e09720;border:1px solid #43e09740;color:var(--green);}
+.bdg-o{background:#ff704320;border:1px solid #ff704340;color:var(--orange);}
+
+/* ── STEPS ── */
+.steps{list-style:none;}
+.steps li{font-size:14px;color:#b5c5de;padding:5px 0;border-bottom:1px solid #ffffff08;line-height:1.6;display:flex;gap:7px;align-items:flex-start;}
+.steps li:last-child{border-bottom:none;}
+.sic{flex-shrink:0;font-size:14px;margin-top:2px;}
+.stx{flex:1;}
+.hl{color:var(--accent);font-weight:700;}
+.warn{color:var(--orange);font-weight:700;}
+strong{color:#fff;font-weight:600;}
+
+/* ── TRANSPORT BLOCK ── */
+.tb{background:#0d1628;border-radius:9px;padding:9px 11px;margin-top:9px;border-left:3px solid var(--accent);}
+.tr-row{display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--muted);margin-bottom:4px;}
+.tr-row:last-child{margin-bottom:0;}
+.trl{color:var(--accent);font-weight:700;min-width:44px;font-size:11px;flex-shrink:0;}
+.trv{color:var(--text);flex:1;}
+.trc{color:var(--gold);font-weight:700;font-size:11px;flex-shrink:0;}
+
+/* ── LINKS ── */
+.map-btn{display:inline-flex;align-items:center;gap:4px;background:#1a3858;color:var(--accent);font-size:12px;padding:6px 12px;border-radius:20px;margin-top:8px;margin-right:5px;text-decoration:none;border:1px solid #4fc3f730;font-weight:600;}
+.pdf-btn{display:inline-flex;align-items:center;gap:4px;background:#2a1c3a;color:#c39eff;font-size:12px;padding:6px 12px;border-radius:20px;margin-top:8px;margin-right:5px;text-decoration:none;border:1px solid #9c6dff40;font-weight:600;}
+
+/* ── HOTEL CARD ── */
+.hotel-card{background:#1a3828;border:1px solid #43e09730;border-radius:10px;padding:10px 12px;margin-top:9px;}
+.hotel-name{font-size:14px;font-weight:700;color:#fff;}
+.hotel-detail{font-size:12px;color:var(--muted);margin-top:3px;}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:#0a0a16;border-top:1px solid #ffffff18;display:flex;z-index:200;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;border:none;background:none;font-family:'Noto Sans TC',sans-serif;color:var(--muted);transition:color .2s;padding-bottom:4px;}
+.nav-btn.active{color:var(--pink);}
+.nav-icon{font-size:20px;}
+.nav-label{font-size:10px;font-weight:600;}
+
+/* ── NON-ITINERARY PAGES ── */
+.inner-page{padding:14px;}
+.page-title{font-size:20px;font-weight:900;color:#fff;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.info-section{background:var(--card);border-radius:13px;padding:13px;margin-bottom:11px;border:1px solid #ffffff0c;}
+.info-section-title{font-size:14px;font-weight:700;color:var(--accent);margin-bottom:9px;display:flex;align-items:center;gap:6px;}
+.info-item{font-size:13px;color:#b5c5de;padding:5px 0;border-bottom:1px solid #ffffff08;display:flex;gap:8px;line-height:1.5;}
+.info-item:last-child{border-bottom:none;}
+.info-item .ii{flex-shrink:0;font-size:14px;}
+.info-item .it{flex:1;}
+
+/* ── PACKING CHECKLIST ── */
+.pack-group{background:var(--card);border-radius:13px;padding:12px 13px;margin-bottom:10px;border:1px solid #ffffff0c;}
+.pack-group-title{font-size:13px;font-weight:700;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.pack-item{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #ffffff08;cursor:pointer;user-select:none;}
+.pack-item:last-child{border-bottom:none;}
+.pack-cb{width:20px;height:20px;border-radius:6px;border:2px solid #ffffff30;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;background:transparent;}
+.pack-cb.checked{background:var(--green);border-color:var(--green);}
+.pack-cb.checked::after{content:'✓';font-size:12px;color:#000;font-weight:900;}
+.pack-label{font-size:13px;color:#b5c5de;flex:1;transition:color .2s;}
+.pack-label.checked{color:var(--muted);text-decoration:line-through;}
+.pack-note{font-size:11px;color:var(--muted);flex-shrink:0;}
+
+/* ── TRANSPORT PAGE ── */
+.transport-card{background:var(--card);border-radius:13px;padding:13px;margin-bottom:10px;border:1px solid #ffffff0c;}
+.transport-card-title{font-size:15px;font-weight:900;color:#fff;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+.route-step{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid #ffffff08;font-size:13px;color:#b5c5de;line-height:1.5;}
+.route-step:last-child{border-bottom:none;}
+.rs-num{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#000;font-weight:900;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.route-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+.route-tag{background:#ffffff0a;border-radius:6px;padding:2px 8px;font-size:11px;color:var(--muted);}
+.route-tag.cost{color:var(--gold);}
+.route-tag.time{color:var(--accent);}
+
+/* ── BUDGET PAGE ── */
+.budget-card{background:var(--card);border-radius:13px;padding:13px;margin-bottom:10px;border:1px solid #ffffff0c;}
+.budget-card-title{font-size:14px;font-weight:700;color:var(--pink);margin-bottom:9px;}
+.budget-grand{background:linear-gradient(135deg,#1a3828,#1a2a4a);border-radius:13px;padding:14px;margin-bottom:10px;border:1px solid #43e09730;}
+.budget-grand-title{font-size:13px;color:var(--green);font-weight:700;margin-bottom:9px;}
+
+/* ── ACCOMMODATION PAGE ── */
+.hotel-big{background:var(--card);border-radius:13px;padding:14px;margin-bottom:10px;border:1px solid #ffffff0c;}
+.hotel-big-name{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px;}
+.hotel-big-dates{font-size:12px;color:var(--gold);margin-bottom:10px;}
+.hotel-info-row{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid #ffffff08;font-size:13px;color:#b5c5de;}
+.hotel-info-row:last-child{border-bottom:none;}
+.hir-icon{flex-shrink:0;font-size:14px;}
+.hir-text{flex:1;}
+
+.scroll-top{position:fixed;bottom:calc(var(--nav-h) + 14px);right:14px;width:40px;height:40px;border-radius:50%;background:var(--pink);color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 18px #ff69b444;z-index:199;border:none;}
+</style>
 </head>
-<body class="pb-10">
+<body>
 
-<div id="app" class="max-w-md mx-auto">
-    <header class="pt-8 pb-4 text-center">
-        <h1 class="text-2xl font-black neon-pink uppercase tracking-tighter">2026港澳吃喝團之小馬哥首航</h1>
-        <div class="mt-2 flex flex-col items-center gap-1">
-            <div class="bg-blue-900/30 border border-blue-500/30 px-4 py-1 rounded-full">
-                <span class="text-[11px] font-bold text-blue-400 tracking-widest">👨‍👩‍👧‍👦 小馬哥.小村.陳RuRu.Ruby.妹妹</span>
-            </div>
-        </div>
-    </header>
-
-    <nav class="nav-fixed sticky top-0 z-50 flex justify-around border-b border-gray-800 bg-[#0d1117]/95 backdrop-blur-md">
-        <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id" 
-                :class="['py-4 px-2 text-xs transition-all', activeTab === tab.id ? 'tab-active' : 'text-gray-500']">
-            {{ tab.icon }} {{ tab.name }}
-        </button>
-    </nav>
-
-    <div v-if="activeTab === 'itinerary'" class="p-4 space-y-6">
-        <div class="flex justify-between gap-2 mb-2">
-            <button v-for="(day, idx) in days" :key="idx" @click="selectedDay = idx"
-                    :class="['flex-1 py-3 rounded-xl flex flex-col items-center transition-all', selectedDay === idx ? 'bg-blue-600 shadow-lg scale-105' : 'bg-gray-800 text-gray-500']">
-                <span class="text-[10px] font-bold">{{ day.week }}</span>
-                <span class="text-lg font-black">{{ day.date }}</span>
-            </button>
-        </div>
-
-        <div v-for="(item, idx) in currentItinerary" :key="item.id">
-            <div v-if="idx > 0 && item.type !== 'flight'" class="flex items-center gap-3 ml-6 my-6">
-                <div class="h-8 border-l-2 border-dashed border-gray-700"></div>
-                <div class="text-[11px] font-bold text-blue-400 bg-blue-900/20 px-3 py-1 rounded-full">
-                    ⏱️ {{ item.travelTime }} ({{ item.travelMethod }})
-                </div>
-            </div>
-
-            <div v-if="item.type === 'flight'" class="boarding-pass p-6 shadow-xl mb-4">
-                <div class="flex justify-between items-center mb-6">
-                    <span class="text-[10px] font-black text-blue-600 tracking-tighter">✈️ 登機證資訊</span>
-                    <span class="font-black italic text-xl text-slate-800">{{ item.code }}</span>
-                </div>
-                <div class="flex justify-between items-center px-2 text-slate-900">
-                    <div class="text-center"><h2 class="text-3xl font-black">{{ item.from }}</h2><p class="text-xs font-bold text-blue-600">{{ item.depTime }}</p></div>
-                    <div class="flex-1 flex flex-col items-center px-4">
-                        <span class="text-[10px] text-gray-400 font-bold uppercase">{{ item.duration }}</span>
-                        <div class="w-full h-[1px] bg-gray-200 relative mt-1"><div class="absolute -top-2 left-1/2 -translate-x-1/2">✈️</div></div>
-                    </div>
-                    <div class="text-center"><h2 class="text-3xl font-black">{{ item.to }}</h2><p class="text-xs font-bold text-blue-600">{{ item.arrTime }}</p></div>
-                </div>
-            </div>
-
-            <div v-else class="card-glass rounded-3xl p-5 shadow-lg border border-white/5">
-                <div class="flex justify-between items-start mb-4">
-                    <span class="text-xs font-black text-pink-500 italic">⏱️ {{ item.time }}</span>
-                    <div class="flex flex-col items-end gap-1">
-                        <span v-if="item.recommend" class="text-[10px] bg-green-400/10 text-green-500 px-2 py-1 rounded border border-green-500/20">{{ item.recommend }}</span>
-                        <span v-if="item.cost" class="text-[10px] text-yellow-500 font-bold">{{ item.cost }}</span>
-                    </div>
-                </div>
-                <h3 class="text-xl font-black flex items-center gap-2 mb-4">
-                    <span>{{ item.icon }}</span> {{ item.title }}
-                </h3>
-                <div class="space-y-1">
-                    <div v-for="(step, sIdx) in item.steps" :key="sIdx" :class="['step-node', sIdx < item.steps.length-1 ? 'step-line' : '']">
-                        {{ step }}
-                    </div>
-                </div>
-                <div v-if="item.openTime" class="mt-3 text-[10px] text-gray-400 border-t border-gray-800 pt-2">
-                    🕒 營業時間：{{ item.openTime }}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div v-if="activeTab === 'info'" class="p-6 space-y-6">
-        <div class="card-glass p-6 rounded-3xl">
-            <h4 class="text-blue-400 font-black mb-2">🏨 香港住宿：旭逸酒店 荃灣</h4>
-            <p class="text-xs text-gray-300 mb-2">香港葵涌圳邊街15-19號</p>
-            <p class="text-xs text-gray-300 mb-4">電話: +852 3958 8333</p>
-            <a href="https://www.hotelease.com.hk/files/photo_album_photo/attachment/11835/HETW_Shuttle%20Bus%20Schedule_TC_V_eVersion.pdf" target="_blank" class="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/10">
-                <span class="text-sm">🚌 酒店接駁車時刻表</span>
-                <i class="fas fa-chevron-right text-gray-600"></i>
-            </a>
-        </div>
-
-        <div class="card-glass p-6 rounded-3xl">
-            <h4 class="text-pink-400 font-black mb-2">🏨 澳門住宿：利澳酒店 Rio Hotel Macau</h4>
-            <p class="text-xs text-gray-300 mb-2">新口岸高美士街33號, 澳門</p>
-            <p class="text-xs text-gray-300">電話: +853 2871 8718</p>
-        </div>
-
-        <div class="card-glass p-6 rounded-3xl">
-            <h4 class="text-yellow-400 font-black mb-4">🚌 跨境交通：港澳快線</h4>
-            <div class="grid grid-cols-1 gap-3">
-                <a href="https://hkmoexpress.gobybus.hk/" target="_blank" class="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/10">
-                    <span class="text-sm">🎫 官方購票 (太子上海街上車)</span>
-                    <i class="fas fa-chevron-right text-gray-600"></i>
-                </a>
-            </div>
-        </div>
-
-        <div class="card-glass p-6 rounded-3xl text-xs space-y-2">
-            <h4 class="text-green-400 font-black mb-2">💡 錢財與支付叮嚀</h4>
-            <p>1. 澳門可用港幣，但匯率 1:1，小金額付現即可。</p>
-            <p>2. 港澳很多老店不收 1000 元大鈔，請務必換成 500/100 元。</p>
-            <p>3. 5 人出行八達通餘額要足，避免在車站集體儲值浪費時間。</p>
-        </div>
-    </div>
-
-    <div v-if="activeTab === 'luggage'" class="p-6 space-y-6">
-        <div v-for="cat in luggageCategories" :key="cat.name" class="card-glass rounded-3xl overflow-hidden">
-            <div class="p-4 bg-white/5 border-b border-gray-800">
-                <h4 class="text-sm font-black" :class="cat.color">{{ cat.name }}</h4>
-            </div>
-            <div v-for="(item, i) in cat.items" :key="i" class="flex items-center gap-4 p-4 border-b border-gray-800/50">
-                <input type="checkbox" class="w-5 h-5 rounded bg-gray-900 border-gray-700 text-blue-500">
-                <label class="flex flex-col">
-                    <span class="text-sm font-bold text-gray-200">{{ item.name }}</span>
-                    <span class="text-[10px] text-gray-500">{{ item.note }}</span>
-                </label>
-            </div>
-        </div>
-    </div>
-
-    <div v-if="activeTab === 'tips'" class="p-6 space-y-6">
-        <div v-for="tip in expertTips" :key="tip.title" class="card-glass p-5 rounded-3xl border-l-4" :style="{borderColor: tip.color}">
-            <h4 class="font-black mb-3 flex items-center gap-2" :style="{color: tip.color}">
-                <span>{{ tip.icon }}</span> {{ tip.title }}
-            </h4>
-            <ul class="space-y-2 text-[11px] text-gray-300">
-                <li v-for="list in tip.content" :key="list" class="flex gap-2"><span>•</span> {{ list }}</li>
-            </ul>
-        </div>
-    </div>
+<!-- HERO -->
+<div class="hero">
+  <div class="trip-title">2026港澳吃喝團<br>之小馬哥首航 ✈️</div>
+  <div class="trip-sub">08/28 – 08/30 · 香港 → 澳門</div>
+  <div class="members">
+    <span class="member-tag">👑 小馬哥</span><span class="member-tag">小村</span><span class="member-tag">陳RuRu</span>
+    <span class="member-tag">Ruby</span><span class="member-tag">妹妹</span><span class="member-tag">閃亮亮</span><span class="member-tag">明琪</span>
+  </div>
 </div>
 
+<!-- FLIGHTS -->
+<div class="flight-strip">
+  <div class="flight-card">
+    <div class="flight-label">✈️ 去程 08/28</div>
+    <div class="flight-row">
+      <div><div class="flight-city">TPE</div><div class="flight-time">11:30 T1</div></div>
+      <div class="flight-arrow">──✈️──▶</div>
+      <div style="text-align:right"><div class="flight-city">HKG</div><div class="flight-time">13:30 T2</div></div>
+    </div>
+    <div class="flight-no">大灣區航空 HB703</div>
+  </div>
+  <div class="flight-card">
+    <div class="flight-label">✈️ 回程 08/30</div>
+    <div class="flight-row">
+      <div><div class="flight-city">MFM</div><div class="flight-time">20:50</div></div>
+      <div class="flight-arrow">──✈️──▶</div>
+      <div style="text-align:right"><div class="flight-city">TPE</div><div class="flight-time">22:40 T1</div></div>
+    </div>
+    <div class="flight-no">星宇航空 JX206</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     PAGE 1: 行程
+     ════════════════════════════════ -->
+<div class="page active" id="page-itinerary">
+  <div class="day-tab-nav">
+    <button class="day-tab active" onclick="showDay(0)"><span class="dt">08/28</span><span class="dd">週五 香港</span></button>
+    <button class="day-tab" onclick="showDay(1)"><span class="dt">08/29</span><span class="dd">週六 港→澳</span></button>
+    <button class="day-tab" onclick="showDay(2)"><span class="dt">08/30</span><span class="dd">週日 澳門</span></button>
+  </div>
+
+  <!-- ── DAY 1 ── -->
+  <div class="day-content active" id="day0">
+    <div class="sec-lbl">🌤 DAY 1 · 08/28 週五 · 香港</div>
+
+    <div class="coll">
+      <div class="coll-hd" onclick="tog(this)"><span>🌡️ 香港天氣參考</span><span class="tog">▼</span></div>
+      <div class="coll-bd">
+        <div class="w-main"><div class="w-icon">⛅</div><div><div class="w-temp">31–34°C</div><div class="w-feels">體感 約36–38°C</div><div class="w-desc">多雲間晴，午後驟雨</div></div></div>
+        <div class="w-stats">
+          <div class="w-stat"><div class="wsi">💧</div><div class="wsl">濕度</div><div class="wsv">82%</div></div>
+          <div class="w-stat"><div class="wsi">🌧</div><div class="wsl">降雨機率</div><div class="wsv">55%</div></div>
+          <div class="w-stat"><div class="wsi">☀️</div><div class="wsl">UV指數</div><div class="wsv">極高</div></div>
+        </div>
+        <div class="w-alert">⚠️ 8月颱風季高峰！懸掛8號或以上颱風信號景點交通全停！</div>
+        <div class="w-tips"><span class="w-tip">☂️ 摺疊傘</span><span class="w-tip">🧴 防曬SPF50</span><span class="w-tip">👕 透氣速乾衣</span><span class="w-tip">💦 多補水</span></div>
+        <div class="w-src">即時預報：<a href="https://www.hko.gov.hk/tc/index.html" target="_blank">香港天文台 ↗</a></div>
+      </div>
+    </div>
+
+    <div class="coll">
+      <div class="coll-hd" onclick="tog(this)"><span>💰 今日預算參考（每人）</span><span class="tog">▼</span></div>
+      <div class="coll-bd">
+        <div class="b-row"><span>S1巴士+E31巴士</span><span class="bv">~HK$26</span></div>
+        <div class="b-row"><span>地鐵（葵興↔中環）</span><span class="bv">~HK$27</span></div>
+        <div class="b-row"><span>竺扶大班燒味</span><span class="bv">~HK$120</span></div>
+        <div class="b-row"><span>叮叮車+山頂纜車</span><span class="bv">~HK$82</span></div>
+        <div class="b-row"><span>天星小輪+地鐵回酒店</span><span class="bv">~HK$17</span></div>
+        <div class="b-row"><span>甜品/宵夜</span><span class="bv">~HK$50</span></div>
+        <div class="b-total"><span>Day 1 小計</span><span class="bv">~HK$322</span></div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot tr">✈️</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 13:30</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">✈️ 抵達香港國際機場 T2</div></div>
+            <ul class="steps">
+              <li><span class="sic">👣</span><span class="stx">出關後跟指示牌走至 <strong>「地面運輸中心」（Ground Transportation Centre）</strong></span></li>
+              <li><span class="sic">🚌</span><span class="stx">地面層找 <span class="hl">S1 巴士站牌</span>，搭往「東涌站/東薈城」約15分</span></li>
+              <li><span class="sic">🛍️</span><span class="stx">東薈城可稍作休息、補購零食，行李可放投幣寄物櫃</span></li>
+            </ul>
+            <div class="tb">
+              <div class="tr-row"><span class="trl">🚌 巴士</span><span class="trv">S1（機場T2→東涌站）</span><span class="trc">HK$5.5</span></div>
+              <div class="tr-row"><span class="trl">⏱️ 時間</span><span class="trv">約15分鐘</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot tr">🚌</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 14:30</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">🚌 東薈城 → 葵興站 → 旭逸酒店</div><span class="bdg bdg-g">💰 HK$20</span></div>
+            <ul class="steps">
+              <li><span class="sic">🚌</span><span class="stx">東涌巴士總站找 <span class="hl">E31 巴士</span>，搭往「葵涌」方向</span></li>
+              <li><span class="sic">⏱️</span><span class="stx">沿青嶼幹線約 <strong>45分鐘</strong>，在 <span class="hl">「葵興站」</span> 下車</span></li>
+              <li><span class="sic">🚶</span><span class="stx">下車後 <strong>過馬路</strong>，走到對面 <span class="hl">7-11 便利店門口</span></span></li>
+              <li><span class="sic">🚐</span><span class="stx">在7-11門口等 <strong>旭逸酒店白色免費接駁車</strong>（依時刻表）</span></li>
+              <li><span class="sic">📞</span><span class="stx">建議提前致電確認接駁時間：+852 3958 8333</span></li>
+            </ul>
+            <div class="tb">
+              <div class="tr-row"><span class="trl">🚌 巴士</span><span class="trv">E31（東涌→葵興）</span><span class="trc">HK$20</span></div>
+              <div class="tr-row"><span class="trl">⏱️ 時間</span><span class="trv">約45分鐘</span></div>
+              <div class="tr-row"><span class="trl">🚐 接駁</span><span class="trv">葵興站過馬路→7-11門口等白色接駁車</span><span class="trc">免費</span></div>
+            </div>
+            <a class="pdf-btn" href="https://www.hotelease.com.hk/files/photo_album_photo/attachment/11835/HETW_Shuttle%20Bus%20Schedule_TC_V_eVersion.pdf" target="_blank">📄 旭逸接駁時刻表 PDF ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot fd">🍗</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 18:30</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">🍗 竺扶大班燒味（晚餐）</div><span class="bdg bdg-g">💰 HK$120/人</span></div>
+            <ul class="steps">
+              <li><span class="sic">🚐</span><span class="stx">搭旭逸接駁車至葵興站→搭 <span class="hl">地鐵荃灣線</span> 往「中環」方向</span></li>
+              <li><span class="sic">🚇</span><span class="stx"><strong>中環站</strong> 下車，走 <span class="hl">D2出口</span></span></li>
+              <li><span class="sic">👣</span><span class="stx">出閘後沿 <strong>德輔道中直走</strong> 約5分鐘至餐廳</span></li>
+              <li><span class="sic">🍖</span><span class="stx">必點：<strong>燒鵝飯、脆皮燒肉、蜜汁叉燒</strong></span></li>
+              <li><span class="sic">⚠️</span><span class="stx"><span class="warn">7人建議提前電話預約</span></span></li>
+            </ul>
+            <div class="tb">
+              <div class="tr-row"><span class="trl">🚇 地鐵</span><span class="trv">葵興→中環（荃灣線）</span><span class="trc">HK$13.5</span></div>
+              <div class="tr-row"><span class="trl">📍 出口</span><span class="trv">D2出口→德輔道中直走</span></div>
+            </div>
+            <a class="map-btn" href="https://maps.google.com/?q=竺扶大班燒味+香港中環" target="_blank">📍 Google Map</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot tr">🚋</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 20:00</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">🚋 竺扶大班→叮叮車→半山扶梯</div><span class="bdg bdg-g">💰 HK$3</span></div>
+            <ul class="steps">
+              <li><span class="sic">👣</span><span class="stx">出餐廳後 <strong>左轉</strong>，沿 <span class="hl">德己立街（D'Aguilar St）</span> 直走下坡約3分鐘</span></li>
+              <li><span class="sic">↙️</span><span class="stx">走到底 <strong>左轉</strong> 進入 <span class="hl">德輔道中（Des Voeux Rd）</span></span></li>
+              <li><span class="sic">🚋</span><span class="stx">路旁即是叮叮車站牌，等往 <span class="hl">「筲箕灣」</span> 方向的車上車</span></li>
+              <li><span class="sic">🔔</span><span class="stx">搭 <strong>2–3站</strong>，在 <span class="hl">「必列者士街」站</span> 下車</span></li>
+              <li><span class="sic">↗️</span><span class="stx">下車後 <strong>右轉</strong> 走必列者士街，直走約2分鐘</span></li>
+              <li><span class="sic">📍</span><span class="stx">看到 <strong>「中環至半山自動扶梯」</strong> 藍色入口即到，扶梯免費，沿途是蘇豪區酒吧街</span></li>
+            </ul>
+            <div class="tb">
+              <div class="tr-row"><span class="trl">🚋 叮叮</span><span class="trv">德輔道中→必列者士街站</span><span class="trc">HK$3</span></div>
+              <div class="tr-row"><span class="trl">🆓 扶梯</span><span class="trv">半山扶梯（免費，10:00–24:00）</span><span class="trc">免費</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot at">🏛️</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 20:30</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">🏛️ 大館 ＋ 蘇豪區夜遊</div><span class="bdg bdg-gr">🆓 免費</span></div>
+            <ul class="steps">
+              <li><span class="sic">👣</span><span class="stx">從扶梯頂出來，<strong>右轉</strong> 沿 <span class="hl">荷李活道</span> 步行約5分鐘至 <strong>大館</strong></span></li>
+              <li><span class="sic">🏛️</span><span class="stx">古蹟建築群免費入場，戶外廣場至23:00</span></li>
+              <li><span class="sic">🍷</span><span class="stx">步行 <span class="hl">士丹頓街（Staunton St）</span>，酒吧餐廳雲集</span></li>
+            </ul>
+            <a class="map-btn" href="https://maps.google.com/?q=大館+香港中環" target="_blank">📍 大館 Map</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot tr">🚡</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 21:15</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">🚡 纜車 → 山頂夜景</div><span class="bdg bdg-g">💰 HK$79/來回</span></div>
+            <ul class="steps">
+              <li><span class="sic">👣</span><span class="stx">從大館沿 <span class="hl">花園道（Garden Rd）</span> 上坡直走約10分鐘</span></li>
+              <li><span class="sic">🚡</span><span class="stx">到達花園道纜車站，買來回票，約 <strong>8分鐘</strong> 到山頂</span></li>
+              <li><span class="sic">📸</span><span class="stx">山頂廣場觀景台，香港最佳夜景！</span></li>
+            </ul>
+            <div class="tb">
+              <div class="tr-row"><span class="trl">🚡 纜車</span><span class="trv">花園道站→山頂（來回）</span><span class="trc">HK$79</span></div>
+            </div>
+            <a class="map-btn" href="https://maps.google.com/?q=花園道纜車站+香港" target="_blank">📍 纜車站 Map</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot tr">🚢</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 22:30</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">🚢 山頂下山→天星小輪→佳佳甜品🍧</div></div>
+            <ul class="steps">
+              <li><span class="sic">🚌</span><span class="stx">山頂廣場外搭 <span class="hl">15號巴士</span> → 中環碼頭（約20分，HK$10）</span></li>
+              <li><span class="sic">🚢</span><span class="stx">中環7號碼頭搭 <strong>天星小輪</strong>→尖沙咀，夜渡維港8分鐘！末班約23:30</span></li>
+              <li><span class="sic">👣</span><span class="stx">下船出閘，沿 <span class="hl">廣東道（Canton Rd）</span> <strong>直走往北</strong> 約10分鐘</span></li>
+              <li><span class="sic">↗️</span><span class="stx"><strong>右轉</strong> 入 <span class="hl">佐敦道（Jordan Rd）</span>，再直走約3分鐘</span></li>
+              <li><span class="sic">🍧</span><span class="stx"><strong>佳佳甜品</strong> 在左手邊！必點：燉蛋、雙皮奶、芝麻糊</span></li>
+            </ul>
+            <div class="tb">
+              <div class="tr-row"><span class="trl">🚌 巴士</span><span class="trv">15號（山頂→中環碼頭）</span><span class="trc">HK$10</span></div>
+              <div class="tr-row"><span class="trl">🚢 小輪</span><span class="trv">中環7號碼頭→尖沙咀</span><span class="trc">HK$3.4</span></div>
+              <div class="tr-row"><span class="trl">👣 步行</span><span class="trv">廣東道直走→右轉佐敦道</span><span class="trc">約13分</span></div>
+            </div>
+            <a class="map-btn" href="https://maps.google.com/?q=佳佳甜品+香港佐敦" target="_blank">📍 佳佳甜品 Map</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot fd">🍺</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 23:45</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">🍺 樂酒場（白加士街）</div></div>
+            <ul class="steps">
+              <li><span class="sic">👣</span><span class="stx">從佳佳甜品沿 <span class="hl">彌敦道</span> 往南走，<strong>右轉</strong> 白加士街，約10分</span></li>
+              <li><span class="sic">🚇</span><span class="stx">結束後走至 <span class="hl">佐敦站</span>，搭 <strong>荃灣線</strong> 往葵興回酒店</span></li>
+            </ul>
+            <div class="tb">
+              <div class="tr-row"><span class="trl">🚇 地鐵</span><span class="trv">佐敦→葵興（荃灣線）</span><span class="trc">HK$13</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DAY 2 ── -->
+  <div class="day-content" id="day1">
+    <div class="sec-lbl">☀️ DAY 2 · 08/29 週六 · 香港→澳門</div>
+
+    <div class="coll">
+      <div class="coll-hd" onclick="tog(this)"><span>🌡️ 天氣參考</span><span class="tog">▼</span></div>
+      <div class="coll-bd">
+        <div class="w-main"><div class="w-icon">🌦</div><div><div class="w-temp">30–33°C</div><div class="w-feels">體感約35–37°C</div><div class="w-desc">早晨多雲，下午雷陣雨</div></div></div>
+        <div class="w-stats">
+          <div class="w-stat"><div class="wsi">💧</div><div class="wsl">濕度</div><div class="wsv">83%</div></div>
+          <div class="w-stat"><div class="wsi">🌧</div><div class="wsl">降雨機率</div><div class="wsv">60%</div></div>
+          <div class="w-stat"><div class="wsi">🌊</div><div class="wsl">海況</div><div class="wsv">中浪</div></div>
+        </div>
+        <div class="w-alert mild">⚠️ 過大橋時若強風，大橋可能限速管制。</div>
+        <div class="w-alert">⚠️ 若有颱風，港澳快線可能停駛，請密切留意！</div>
+        <div class="w-tips"><span class="w-tip">☂️ 傘不離身</span><span class="w-tip">👟 防滑鞋</span><span class="w-tip">💧 帶水壺</span></div>
+        <div class="w-src"><a href="https://www.smg.gov.mo/zh" target="_blank">澳門氣象局 ↗</a></div>
+      </div>
+    </div>
+
+    <div class="coll">
+      <div class="coll-hd" onclick="tog(this)"><span>💰 今日預算參考（每人）</span><span class="tog">▼</span></div>
+      <div class="coll-bd">
+        <div class="b-row"><span>早餐（一點心）</span><span class="bv">~HK$60</span></div>
+        <div class="b-row"><span>地鐵（太子→上環）</span><span class="bv">~HK$8</span></div>
+        <div class="b-row"><span>兆成行+珍妮曲奇+蘭芳園</span><span class="bv">~HK$200</span></div>
+        <div class="b-row"><span>港澳快線巴士</span><span class="bv">~HK$160</span></div>
+        <div class="b-row"><span>大三巴零食+禮記雪糕</span><span class="bv">~HK$100</span></div>
+        <div class="b-row"><span>路氹夜景/杏香園宵夜</span><span class="bv">~HK$80</span></div>
+        <div class="b-total"><span>Day 2 小計</span><span class="bv">~HK$608</span></div>
+      </div>
+    </div>
+
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-dot ht">🧳</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 09:00</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">🧳 退房→港澳快線寄行李→一點心抽號</div></div>
+            <ul class="steps">
+              <li><span class="sic">🏨</span><span class="stx">09:00 退房，行李隨身出發</span></li>
+              <li><span class="sic">🚐</span><span class="stx">旭逸接駁車→葵興站→搭 <span class="hl">荃灣線</span> 往「太子」</span></li>
+              <li><span class="sic">🚇</span><span class="stx"><strong>太子站</strong> 下車，走 <span class="hl">B2出口</span> 出來，<strong>右轉</strong> 沿 <span class="hl">亞皆老街</span> 直走，<strong>左轉</strong> 入 <span class="hl">上海街</span>，步行約8分鐘至 <strong>695號港澳快線辦公室</strong> 寄存行李</span></li>
+              <li><span class="sic">🥟</span><span class="stx">寄好行李後步行5分鐘至通菜街 <strong>「一點心」</strong>，<span class="hl">先抽號碼牌再等叫號！</span></span></li>
+              <li><span class="sic">⏰</span><span class="stx">一點心 <strong>10:00</strong> 開門，建議09:50到場取號</span></li>
+            </ul>
+            <div class="tb">
+              <div class="tr-row"><span class="trl">🚇 地鐵</span><span class="trv">葵興→太子（荃灣線）</span><span class="trc">HK$10</span></div>
+              <div class="tr-row"><span class="trl">📍 路線</span><span class="trv">B2出口→右轉亞皆老街→左轉上海街→695號</span></div>
+              <div class="tr-row"><span class="trl">🧳 寄物</span><span class="trv">上海街695號港澳快線辦公室</span><span class="trc">免費</span></div>
+            </div>
+            <a class="map-btn" href="https://maps.google.com/?q=一點心+香港太子" target="_blank">📍 一點心 Map</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot fd">🛍️</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 11:00</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">🛍️ 中環採買：兆成行＋珍妮曲奇＋蘭芳園</div><span class="bdg bdg-g">💰 HK$200+</span></div>
+            <ul class="steps">
+              <li><span class="sic">🚇</span><span class="stx">太子站搭 <span class="hl">荃灣線</span>→ <strong>上環站</strong> 下車，走 <span class="hl">E2出口</span></span></li>
+              <li><span class="sic">1️⃣</span><span class="stx">出閘後沿 <span class="hl">永利街</span> 直走約3分鐘至 <strong>「兆成行」</strong>（海味乾貨手信，買鮑魚、瑤柱、臘腸等）</span></li>
+              <li><span class="sic">2️⃣</span><span class="stx">從兆成行走 <strong>荷李活道</strong>，<strong>左轉</strong> 入 <span class="hl">結志街</span> 約5分鐘至 <strong>「珍妮曲奇」</strong>（排隊約30–60分）</span></li>
+              <li><span class="sic">3️⃣</span><span class="stx">排珍妮時輪流去隔壁 <strong>「蘭芳園」</strong> 買 <span class="hl">絲襪奶茶</span>（HK$30），一次買足再等</span></li>
+            </ul>
+            <div class="tb">
+              <div class="tr-row"><span class="trl">🚇 地鐵</span><span class="trv">太子→上環（荃灣線）</span><span class="trc">HK$8</span></div>
+              <div class="tr-row"><span class="trl">📍 路線</span><span class="trv">E2出口→永利街（兆成行）→荷李活道→左轉結志街（珍妮）</span></div>
+              <div class="tr-row"><span class="trl">⏱️ 時間</span><span class="trv">此區約2.5–3小時</span></div>
+            </div>
+            <a class="map-btn" href="https://maps.google.com/?q=兆成行+香港上環" target="_blank">📍 兆成行 Map</a>
+            <a class="map-btn" href="https://maps.google.com/?q=珍妮曲奇+香港中環" target="_blank">📍 珍妮曲奇 Map</a>
+            <a class="map-btn" href="https://maps.google.com/?q=蘭芳園+香港中環" target="_blank">📍 蘭芳園 Map</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 港澳快線 詳細版 -->
+      <div class="tl-item">
+        <div class="tl-dot tr">🚌</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 14:00</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">🚌 港澳快線 → 澳門（詳細步驟）</div><span class="bdg bdg-g">💰 HK$160/人</span></div>
+            <ul class="steps">
+              <li><span class="sic">1️⃣</span><span class="stx"><strong>13:40 前</strong> 從上環搭地鐵回太子站，步行至 <span class="hl">上海街695號港澳快線辦公室</span> 取行李並集合</span></li>
+              <li><span class="sic">2️⃣</span><span class="stx">在辦公室出示<strong>身分證或護照</strong>，辦理跨境乘車手續，拿取座位票券</span></li>
+              <li><span class="sic">3️⃣</span><span class="stx"><strong>14:10前集合完畢</strong>，工作人員帶領上巴士，行李放車廂下方行李艙</span></li>
+              <li><span class="sic">4️⃣</span><span class="stx">巴士出發，沿九龍市區道路行駛約 <strong>20–30分鐘</strong> 至港珠澳大橋香港口岸</span></li>
+              <li><span class="sic">5️⃣</span><span class="stx"><strong>香港出境</strong>：全體攜帶 <span class="warn">所有隨身行李下車</span>，進入香港出境大堂過關蓋章，完成後返回原巴士上車</span></li>
+              <li><span class="sic">6️⃣</span><span class="stx">巴士過 <strong>港珠澳大橋</strong>，橋長55公里，車程約 <strong>40–45分鐘</strong>，可欣賞海景</span></li>
+              <li><span class="sic">7️⃣</span><span class="stx"><strong>澳門入境</strong>：再次全體攜行李下車，進入澳門入境大堂蓋入境章，完成後返回原巴士</span></li>
+              <li><span class="sic">8️⃣</span><span class="stx">巴士駛入澳門市區，在 <strong>「回力巴士站（新口岸）」</strong> 下車（約10分鐘）</span></li>
+              <li><span class="sic">9️⃣</span><span class="stx">下車後步行約 <strong>10分鐘</strong> 至 <strong>利澳酒店</strong>（沿高美士街直走即達）</span></li>
+            </ul>
+            <div class="tb">
+              <div class="tr-row"><span class="trl">📍 集合</span><span class="trv">上海街695號港澳快線（14:10前）</span></div>
+              <div class="tr-row"><span class="trl">🌉 大橋</span><span class="trv">港珠澳大橋全程（車程約40分）</span></div>
+              <div class="tr-row"><span class="trl">⏱️ 總時間</span><span class="trv">含過關約 2–2.5 小時</span></div>
+              <div class="tr-row"><span class="trl">💰 費用</span><span class="trv">港澳快線票價</span><span class="trc">HK$~160</span></div>
+              <div class="tr-row"><span class="trl">⚠️ 注意</span><span class="trv">過關須出示護照/身分證，行李需過X光機</span></div>
+              <div class="tr-row"><span class="trl">🎫 購票</span><span class="trv">建議提前官網訂票，旺季易售完</span></div>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-name">🏨 利澳酒店 Rio Hotel Macau</div>
+              <div class="hotel-detail">📍 澳門新口岸高美士街33號</div>
+              <div class="hotel-detail">📞 +853 2871 8718</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot at">⛪</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 17:30</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">⛪ 大三巴區域</div><span class="bdg bdg-gr">🆓 景點免費</span></div>
+            <ul class="steps">
+              <li><span class="sic">🚌</span><span class="stx">利澳門口搭 <span class="hl">3號巴士</span>→ <strong>「新馬路」</strong> 站下車（約10分，MOP$6）</span></li>
+              <li><span class="sic">👣</span><span class="stx">下車後 <strong>右轉</strong> 沿 <span class="hl">板樟堂街</span>，<strong>左轉</strong> 沿 <span class="hl">大三巴街</span> 上坡約10分至 <strong>大三巴牌坊</strong></span></li>
+              <li><span class="sic">🍪</span><span class="stx">步行5分鐘至 <strong>「最香餅家」</strong> 買杏仁餅</span></li>
+              <li><span class="sic">🍦</span><span class="stx">步行至 <strong>「禮記雪糕」</strong> 吃三色雪糕（MOP$30）</span></li>
+            </ul>
+            <a class="map-btn" href="https://maps.google.com/?q=大三巴牌坊+澳門" target="_blank">📍 大三巴 Map</a>
+            <a class="map-btn" href="https://maps.google.com/?q=最香餅家+澳門" target="_blank">📍 最香餅家 Map</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot at">🎡</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 20:00</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">🎡 路氹夜景（永利噴泉秀）</div><span class="bdg bdg-gr">🆓 免費</span></div>
+            <ul class="steps">
+              <li><span class="sic">🚌</span><span class="stx">搭 <span class="hl">25/26A巴士</span>→ <strong>「新濠影匯」</strong> 站下車（MOP$6）</span></li>
+              <li><span class="sic">🎡</span><span class="stx">下車即見 <strong>8字天橋摩天輪</strong>，免費搭乘俯瞰路氹夜景</span></li>
+              <li><span class="sic">👣</span><span class="stx">步行至 <strong>「永利皇宮」</strong>，搭免費纜車橫越人工湖</span></li>
+              <li><span class="sic">⛲</span><span class="stx">噴泉秀每20分鐘一場（19:00後），燈光水舞超壯觀！</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot fd">🍵</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 22:00</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">🍵 杏香園（清平店）宵夜</div><span class="bdg bdg-g">💰 MOP$30–50</span></div>
+            <ul class="steps">
+              <li><span class="sic">🚌</span><span class="stx">從路氹搭巴士回新馬路，沿 <span class="hl">清平街</span> 步行至杏香園</span></li>
+              <li><span class="sic">🍶</span><span class="stx">必吃：<strong>蛋白夾心杏仁茶、核桃露</strong>（米其林推薦）</span></li>
+            </ul>
+            <a class="map-btn" href="https://maps.google.com/?q=杏香園+澳門清平街" target="_blank">📍 杏香園 Map</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── DAY 3 ── -->
+  <div class="day-content" id="day2">
+    <div class="sec-lbl">🌅 DAY 3 · 08/30 週日 · 澳門→台北</div>
+
+    <div class="coll">
+      <div class="coll-hd" onclick="tog(this)"><span>🌡️ 澳門天氣參考</span><span class="tog">▼</span></div>
+      <div class="coll-bd">
+        <div class="w-main"><div class="w-icon">🌤</div><div><div class="w-temp">29–32°C</div><div class="w-feels">體感約34–36°C</div><div class="w-desc">晴時多雲，傍晚有短暫陣雨</div></div></div>
+        <div class="w-stats">
+          <div class="w-stat"><div class="wsi">💧</div><div class="wsl">濕度</div><div class="wsv">80%</div></div>
+          <div class="w-stat"><div class="wsi">🌧</div><div class="wsl">降雨機率</div><div class="wsv">45%</div></div>
+          <div class="w-stat"><div class="wsi">🌙</div><div class="wsl">夜間</div><div class="wsv">28°C</div></div>
+        </div>
+        <div class="w-alert mild">✈️ 回程20:50起飛，若傍晚有雷雨請確認航班動態，18:30前到機場！</div>
+        <div class="w-src"><a href="https://www.smg.gov.mo/zh" target="_blank">澳門氣象局 ↗</a> · <a href="https://www.cwa.gov.tw" target="_blank">中央氣象署 ↗</a></div>
+      </div>
+    </div>
+
+    <div class="coll">
+      <div class="coll-hd" onclick="tog(this)"><span>💰 今日預算參考（每人）</span><span class="tog">▼</span></div>
+      <div class="coll-bd">
+        <div class="b-row"><span>世紀咖啡早餐</span><span class="bv">~MOP$60</span></div>
+        <div class="b-row"><span>蛋塔/手信</span><span class="bv">~MOP$100</span></div>
+        <div class="b-row"><span>巴士至機場</span><span class="bv">~MOP$12</span></div>
+        <div class="b-total"><span>Day 3 小計</span><span class="bv">~MOP$172</span></div>
+      </div>
+    </div>
+
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-dot ht">🏨</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 10:00</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">🏨 退房→飯店寄行李</div><span class="bdg bdg-gr">🆓 免費</span></div>
+            <ul class="steps">
+              <li><span class="sic">🧳</span><span class="stx">10:00 辦理退房，行李存放於 <strong>利澳飯店行李房</strong></span></li>
+              <li><span class="sic">⏱️</span><span class="stx">下午 <strong>17:30</strong> 回飯店取行李前往機場</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot fd">☕</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 11:00</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">☕ 官也街早餐：世紀咖啡</div><span class="bdg bdg-g">💰 MOP$60/人</span></div>
+            <ul class="steps">
+              <li><span class="sic">🚌</span><span class="stx">利澳門口搭 <span class="hl">路氹城巴士</span>→ <strong>「官也街」</strong> 站下車（約15分，MOP$6）</span></li>
+              <li><span class="sic">⏰</span><span class="stx">世紀咖啡 <strong>11:00</strong> 開門，建議提前到場排隊</span></li>
+              <li><span class="sic">☕</span><span class="stx">必點：<strong>炭燒瓦煲奶茶、豬扒包</strong></span></li>
+              <li><span class="sic">📌</span><span class="stx">備案：「喜蓮咖啡」同街，供紅豆冰、乾炒牛通</span></li>
+            </ul>
+            <a class="map-btn" href="https://maps.google.com/?q=世紀咖啡+澳門官也街" target="_blank">📍 世紀咖啡 Map</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot at">🍮</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 13:00</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">🍮 安德魯蛋塔＋奢華飯店巡禮</div><span class="bdg bdg-gr">🆓 免費逛</span></div>
+            <ul class="steps">
+              <li><span class="sic">🥚</span><span class="stx">先到官也街 <strong>「安德魯蛋塔」</strong>（HK$15/個，必吃！）</span></li>
+              <li><span class="sic">1️⃣</span><span class="stx">步行進入Cotai區→ <strong>倫敦人（The Londoner）</strong>：英倫風大廳，免費逛</span></li>
+              <li><span class="sic">2️⃣</span><span class="stx">室內直走連通→ <strong>威尼斯人（The Venetian）</strong>（步行約5分）：室內運河超壯觀</span></li>
+              <li><span class="sic">3️⃣</span><span class="stx">室內天橋直連→ <strong>巴黎人（The Parisian）</strong>（步行約3分）：艾菲爾鐵塔模型超好拍！</span></li>
+              <li><span class="sic">4️⃣</span><span class="stx">步行約10分或搭免費接駁→ <strong>美高梅天幕（MGM Cotai）</strong></span></li>
+            </ul>
+            <div class="tb">
+              <div class="tr-row"><span class="trl">📍 順序</span><span class="trv">蛋塔→倫敦人→威尼斯人→巴黎人→美高梅</span></div>
+              <div class="tr-row"><span class="trl">👣 步行</span><span class="trv">各館室內連通，全程涼爽！</span><span class="trc">免費</span></div>
+              <div class="tr-row"><span class="trl">⏱️ 時間</span><span class="trv">此段約3–4小時</span></div>
+            </div>
+            <a class="map-btn" href="https://maps.google.com/?q=安德魯蛋撻+澳門" target="_blank">📍 安德魯蛋塔 Map</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot tr">🧳</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 17:30</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">🧳 取行李→澳門國際機場</div><span class="bdg bdg-o">⚠️ 預留2小時</span></div>
+            <ul class="steps">
+              <li><span class="sic">🚌</span><span class="stx">搭巴士回 <strong>利澳酒店</strong> 取行李（路氹→利澳，約15分）</span></li>
+              <li><span class="sic">🚌</span><span class="stx">飯店門口搭 <span class="hl">MT1路氹城線</span>→澳門機場，或叫計程車</span></li>
+              <li><span class="sic">🚕</span><span class="stx"><span class="warn">7人需叫兩台計程車</span>，或預約廂型車（MOP$60–80/台）</span></li>
+              <li><span class="sic">✈️</span><span class="stx"><span class="warn">建議18:30前抵達機場</span>，JX206有兩個訂位代號，分開排隊</span></li>
+            </ul>
+            <div class="tb">
+              <div class="tr-row"><span class="trl">🚌 巴士</span><span class="trv">MT1路氹城線→澳門機場</span><span class="trc">MOP$6</span></div>
+              <div class="tr-row"><span class="trl">🚕 計程</span><span class="trv">利澳→機場（需兩台）</span><span class="trc">MOP$60–80</span></div>
+              <div class="tr-row"><span class="trl">⏱️ 車程</span><span class="trv">約20–30分鐘</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot tr">✈️</div>
+        <div class="tl-body">
+          <div class="tl-time">⏱️ 20:50</div>
+          <div class="tl-card">
+            <div class="tl-hd"><div class="tl-title">✈️ 星宇航空 JX206→回台灣🎉</div></div>
+            <ul class="steps">
+              <li><span class="sic">✈️</span><span class="stx">澳門（MFM）<strong>20:50</strong> 起飛</span></li>
+              <li><span class="sic">🛬</span><span class="stx">桃園機場 T1 <strong>22:40</strong> 抵達（飛行1小時50分）</span></li>
+              <li><span class="sic">🎉</span><span class="stx">平安回家！下次再約！</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     PAGE 2: 交通
+     ════════════════════════════════ -->
+<div class="page" id="page-transport">
+  <div class="inner-page">
+    <div class="page-title">🚇 交通總覽</div>
+
+    <div class="transport-card">
+      <div class="transport-card-title">✈️ 去程：桃園→香港</div>
+      <div class="route-step"><div class="rs-num">1</div><div>桃園機場 T1，搭 <strong>大灣區航空 HB703</strong><br><div class="route-meta"><span class="route-tag time">11:30起飛</span><span class="route-tag time">13:30抵達香港T2</span><span class="route-tag">飛行約2小時</span></div></div></div>
+    </div>
+
+    <div class="transport-card">
+      <div class="transport-card-title">🚌 香港機場→東薈城→旭逸酒店</div>
+      <div class="route-step"><div class="rs-num">1</div><div>香港T2出關→地面運輸中心→搭 <strong>S1巴士</strong>→東涌站<div class="route-meta"><span class="route-tag cost">HK$5.5</span><span class="route-tag time">約15分</span></div></div></div>
+      <div class="route-step"><div class="rs-num">2</div><div>東涌巴士總站→搭 <strong>E31巴士</strong>→葵興站下車<div class="route-meta"><span class="route-tag cost">HK$20</span><span class="route-tag time">約45分</span></div></div></div>
+      <div class="route-step"><div class="rs-num">3</div><div>葵興站過馬路→7-11門口等 <strong>旭逸白色接駁車</strong><div class="route-meta"><span class="route-tag cost">免費</span><span class="route-tag time">依時刻表</span></div></div></div>
+      <a class="pdf-btn" href="https://www.hotelease.com.hk/files/photo_album_photo/attachment/11835/HETW_Shuttle%20Bus%20Schedule_TC_V_eVersion.pdf" target="_blank">📄 旭逸接駁時刻表 PDF ↗</a>
+    </div>
+
+    <div class="transport-card">
+      <div class="transport-card-title">🚌 港澳快線（香港→澳門）</div>
+      <div class="route-step"><div class="rs-num">1</div><div>太子上海街695號辦理登記<div class="route-meta"><span class="route-tag">14:10前集合</span></div></div></div>
+      <div class="route-step"><div class="rs-num">2</div><div>市區道路行駛→港珠澳大橋香港口岸<div class="route-meta"><span class="route-tag time">約20–30分</span></div></div></div>
+      <div class="route-step"><div class="rs-num">3</div><div>全體帶行李下車→香港出境蓋章→返回巴士<div class="route-meta"><span class="route-tag">需帶護照/身分證</span></div></div></div>
+      <div class="route-step"><div class="rs-num">4</div><div>過港珠澳大橋（長55公里）<div class="route-meta"><span class="route-tag time">約40–45分</span><span class="route-tag">可欣賞海景</span></div></div></div>
+      <div class="route-step"><div class="rs-num">5</div><div>全體帶行李下車→澳門入境蓋章→返回巴士<div class="route-meta"><span class="route-tag">行李過X光機</span></div></div></div>
+      <div class="route-step"><div class="rs-num">6</div><div>澳門市區→「回力巴士站」下車<div class="route-meta"><span class="route-tag cost">HK$~160</span><span class="route-tag time">全程約2–2.5小時</span></div></div></div>
+      <div class="route-step"><div class="rs-num">7</div><div>步行約10分鐘至利澳酒店（沿高美士街直走）</div></div>
+    </div>
+
+    <div class="transport-card">
+      <div class="transport-card-title">✈️ 回程：澳門→桃園</div>
+      <div class="route-step"><div class="rs-num">1</div><div>利澳酒店取行李後，搭 <strong>MT1巴士</strong> 或計程車（兩台）<div class="route-meta"><span class="route-tag cost">MOP$6 / MOP$60–80</span><span class="route-tag time">約20–30分</span></div></div></div>
+      <div class="route-step"><div class="rs-num">2</div><div>澳門機場辦理登機（18:30前到）→ <strong>JX206</strong><div class="route-meta"><span class="route-tag time">20:50起飛→22:40抵桃園T1</span></div></div></div>
+    </div>
+
+    <div class="transport-card">
+      <div class="transport-card-title">💳 港澳常用交通付款方式</div>
+      <div class="route-step"><div class="rs-num">💳</div><div><strong>八達通（香港）</strong>：地鐵、巴士、叮叮車、天星小輪均可用，建議人手一張</div></div>
+      <div class="route-step"><div class="rs-num">💰</div><div><strong>澳門幣/港幣</strong>：澳門巴士不找零，請備妥MOP$6零錢</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     PAGE 3: 住宿
+     ════════════════════════════════ -->
+<div class="page" id="page-hotel">
+  <div class="inner-page">
+    <div class="page-title">🏨 住宿資訊</div>
+
+    <div class="hotel-big">
+      <div class="hotel-big-name">旭逸酒店 荃灣</div>
+      <div class="hotel-big-dates">📅 08/28 入住 · 08/29 退房（1晚）</div>
+      <div class="hotel-info-row"><span class="hir-icon">📍</span><span class="hir-text">香港葵涌圳邊街15-19號</span></div>
+      <div class="hotel-info-row"><span class="hir-icon">📞</span><span class="hir-text">+852 3958 8333</span></div>
+      <div class="hotel-info-row"><span class="hir-icon">🚐</span><span class="hir-text">免費接駁車：葵興站過馬路，7-11門口等白色接駁車</span></div>
+      <div class="hotel-info-row"><span class="hir-icon">⏰</span><span class="hir-text">Check-in 15:00 / Check-out 12:00（可能可提早入住，建議電話確認）</span></div>
+      <div class="hotel-info-row"><span class="hir-icon">📶</span><span class="hir-text">房內有WiFi</span></div>
+      <div style="margin-top:10px">
+        <a class="map-btn" href="https://maps.google.com/?q=旭逸酒店荃灣+香港" target="_blank">📍 Google Map</a>
+        <a class="pdf-btn" href="https://www.hotelease.com.hk/files/photo_album_photo/attachment/11835/HETW_Shuttle%20Bus%20Schedule_TC_V_eVersion.pdf" target="_blank">📄 接駁時刻表</a>
+      </div>
+    </div>
+
+    <div class="hotel-big">
+      <div class="hotel-big-name">利澳酒店 Rio Hotel Macau</div>
+      <div class="hotel-big-dates">📅 08/29 入住 · 08/30 退房（1晚）</div>
+      <div class="hotel-info-row"><span class="hir-icon">📍</span><span class="hir-text">澳門新口岸高美士街33號</span></div>
+      <div class="hotel-info-row"><span class="hir-icon">📞</span><span class="hir-text">+853 2871 8718</span></div>
+      <div class="hotel-info-row"><span class="hir-icon">🛏️</span><span class="hir-text">標準大床客房 1間（08/29–08/30）</span></div>
+      <div class="hotel-info-row"><span class="hir-icon">⏰</span><span class="hir-text">Check-in 15:00 / Check-out 12:00</span></div>
+      <div class="hotel-info-row"><span class="hir-icon">🧳</span><span class="hir-text">退房後行李可免費寄放行李房至17:30取回</span></div>
+      <div class="hotel-info-row"><span class="hir-icon">🚌</span><span class="hir-text">飯店門口搭3號巴士可達新馬路/大三巴區</span></div>
+      <div style="margin-top:10px">
+        <a class="map-btn" href="https://maps.google.com/?q=利澳酒店+澳門" target="_blank">📍 Google Map</a>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">💡 住宿小提醒</div>
+      <div class="info-item"><span class="ii">🔑</span><span class="it">兩間酒店均可提前電話確認能否提早check-in（旺季不保證）</span></div>
+      <div class="info-item"><span class="ii">🧳</span><span class="it">旭逸退房後行李直接帶去港澳快線辦公室寄存</span></div>
+      <div class="info-item"><span class="ii">📱</span><span class="it">入住時告知前台人數，確認床型配置</span></div>
+      <div class="info-item"><span class="ii">🚭</span><span class="it">兩間酒店均有禁煙規定，違者罰款</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     PAGE 4: 行李
+     ════════════════════════════════ -->
+<div class="page" id="page-packing">
+  <div class="inner-page">
+    <div class="page-title">🧳 行前準備 ＆ 行李清單</div>
+
+    <div class="info-section" style="margin-bottom:10px;">
+      <div class="info-section-title">📶 網路 ＆ 通訊</div>
+      <div class="info-item"><span class="ii">📱</span><span class="it"><strong>建議購買港澳上網SIM卡</strong>（台灣出發前在網路購買，如旅遊達人、遠傳等，3天HK$100以內）</span></div>
+      <div class="info-item"><span class="ii">📶</span><span class="it">或使用 <strong>eSIM</strong>（AIS、KKday等平台購買，港澳通用套餐）</span></div>
+      <div class="info-item"><span class="ii">🌐</span><span class="it">香港地鐵站、麥當勞、星巴克均有免費WiFi</span></div>
+      <div class="info-item"><span class="ii">📞</span><span class="it">澳門與香港不同電信區，港澳通用套餐較划算</span></div>
+    </div>
+
+    <div class="info-section" style="margin-bottom:10px;">
+      <div class="info-section-title">💵 換匯建議</div>
+      <div class="info-item"><span class="ii">💴</span><span class="it">建議換 <strong>港幣（HKD）</strong> 為主，澳門景點及商店均收港幣（匯率約1:1）</span></div>
+      <div class="info-item"><span class="ii">🏦</span><span class="it">台灣機場換匯匯率較差，建議到香港機場或市區銀行換</span></div>
+      <div class="info-item"><span class="ii">💳</span><span class="it"><strong>信用卡</strong>：大型餐廳/百貨可用VISA/Mastercard，小店及巴士只收現金</span></div>
+      <div class="info-item"><span class="ii">🚇</span><span class="it"><strong>八達通</strong>：香港必備，機場入境後即可購買（HK$150，含HK$100儲值+HK$50按金）</span></div>
+      <div class="info-item"><span class="ii">⚠️</span><span class="it">攜帶足夠零錢，澳門巴士 <strong>MOP$6 不找零</strong>，請備妥零錢</span></div>
+    </div>
+
+    <div class="info-section" style="margin-bottom:10px;">
+      <div class="info-section-title">🛡️ 保險建議</div>
+      <div class="info-item"><span class="ii">🛡️</span><span class="it">建議購買 <strong>旅遊平安險</strong>（含颱風取消保障、醫療險）</span></div>
+      <div class="info-item"><span class="ii">🌀</span><span class="it">8月颱風季，<strong>颱風取消/延誤保障</strong> 特別重要</span></div>
+      <div class="info-item"><span class="ii">🏥</span><span class="it">香港醫療費用高昂，建議醫療保額至少 HK$50,000</span></div>
+      <div class="info-item"><span class="ii">📋</span><span class="it">可向信用卡公司確認旅遊保障是否自動生效</span></div>
+    </div>
+
+    <div class="pack-group">
+      <div class="pack-group-title">📄 重要文件</div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">護照（有效期6個月以上）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">台灣身分證（備用）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">所有電子機票截圖（HB703 / JX206）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">旭逸酒店訂房確認信</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">利澳酒店訂房確認信</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">港澳快線訂票確認信</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">旅遊保險證明文件</div></div>
+    </div>
+
+    <div class="pack-group">
+      <div class="pack-group-title">💵 金錢 ＆ 卡片</div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">港幣現金（建議每人HK$1500備用）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">信用卡（VISA / Mastercard）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">八達通卡（或抵港後購買）</div></div>
+    </div>
+
+    <div class="pack-group">
+      <div class="pack-group-title">📱 電子設備</div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">手機＋充電線</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">行動電源（飛機禁放托運）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">港澳上網SIM卡 或 eSIM 設定好</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">相機 / 記憶卡</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">萬用插頭轉接頭（香港用3腳方形）</div></div>
+    </div>
+
+    <div class="pack-group">
+      <div class="pack-group-title">👕 衣物</div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">輕薄透氣衣服（3套）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">薄外套/針織衫（室內冷氣強）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">舒適步行鞋（防滑鞋底）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">拖鞋（酒店用）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">內衣/內褲（3套）</div></div>
+    </div>
+
+    <div class="pack-group">
+      <div class="pack-group-title">🧴 盥洗 ＆ 衛生</div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">防曬乳 SPF50（超重要！）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">摺疊雨傘（必備）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">個人藥品（腸胃藥、止痛藥、暈車藥）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">牙刷牙膏</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">保濕噴霧（冷氣房必備）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">濕紙巾</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">環保購物袋（買手信用）</div></div>
+    </div>
+
+    <div class="pack-group">
+      <div class="pack-group-title">🍜 美食攻略準備</div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">下載 Google Maps 離線地圖（香港/澳門）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">下載 OpenRice APP（香港餐廳評分）</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">竺扶大班電話預約</div><div class="pack-note">建議</div></div>
+      <div class="pack-item" onclick="chk(this)"><div class="pack-cb"></div><div class="pack-label">港澳快線訂票（官網或APP）</div><div class="pack-note">必要</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     PAGE 5: 預算
+     ════════════════════════════════ -->
+<div class="page" id="page-budget">
+  <div class="inner-page">
+    <div class="page-title">💰 預算總覽</div>
+
+    <div class="budget-grand">
+      <div class="budget-grand-title">📊 3天總預算（每人估算）</div>
+      <div class="b-row"><span>Day 1 香港</span><span class="bv">~HK$322</span></div>
+      <div class="b-row"><span>Day 2 港→澳</span><span class="bv">~HK$608</span></div>
+      <div class="b-row"><span>Day 3 澳門</span><span class="bv">~HK$172</span></div>
+      <div class="b-total"><span>活動費用總計</span><span class="bv">~HK$1,102</span></div>
+      <div class="b-note">* 不含住宿、機票、購物手信。預算HK$2,000，剩餘約 <strong style="color:var(--green)">HK$898</strong> 可彈性使用（購物/手信/餐廳升級）。</div>
+    </div>
+
+    <div class="budget-card">
+      <div class="budget-card-title">🗓️ Day 1（08/28）香港 — 詳細</div>
+      <div class="b-row"><span>S1+E31巴士（機場→旭逸）</span><span class="bv">HK$25.5</span></div>
+      <div class="b-row"><span>地鐵（葵興→中環）</span><span class="bv">HK$13.5</span></div>
+      <div class="b-row"><span>竺扶大班燒味</span><span class="bv">HK$120</span></div>
+      <div class="b-row"><span>叮叮車</span><span class="bv">HK$3</span></div>
+      <div class="b-row"><span>山頂纜車來回</span><span class="bv">HK$79</span></div>
+      <div class="b-row"><span>15號巴士（山頂→中環）</span><span class="bv">HK$10</span></div>
+      <div class="b-row"><span>天星小輪</span><span class="bv">HK$3.4</span></div>
+      <div class="b-row"><span>地鐵（佐敦→葵興）</span><span class="bv">HK$13</span></div>
+      <div class="b-row"><span>佳佳甜品/宵夜</span><span class="bv">~HK$55</span></div>
+      <div class="b-total"><span>Day 1 小計</span><span class="bv">~HK$322</span></div>
+    </div>
+
+    <div class="budget-card">
+      <div class="budget-card-title">🗓️ Day 2（08/29）港→澳 — 詳細</div>
+      <div class="b-row"><span>地鐵（葵興→太子→上環）</span><span class="bv">HK$18</span></div>
+      <div class="b-row"><span>一點心早餐</span><span class="bv">~HK$60</span></div>
+      <div class="b-row"><span>兆成行海味手信</span><span class="bv">~HK$80</span></div>
+      <div class="b-row"><span>珍妮曲奇</span><span class="bv">~HK$90</span></div>
+      <div class="b-row"><span>蘭芳園絲襪奶茶</span><span class="bv">~HK$30</span></div>
+      <div class="b-row"><span>港澳快線巴士</span><span class="bv">~HK$160</span></div>
+      <div class="b-row"><span>澳門3號巴士</span><span class="bv">MOP$6</span></div>
+      <div class="b-row"><span>大三巴零食+禮記雪糕</span><span class="bv">~HK$70</span></div>
+      <div class="b-row"><span>25/26A巴士</span><span class="bv">MOP$6</span></div>
+      <div class="b-row"><span>杏香園宵夜</span><span class="bv">~MOP$40</span></div>
+      <div class="b-total"><span>Day 2 小計</span><span class="bv">~HK$608</span></div>
+    </div>
+
+    <div class="budget-card">
+      <div class="budget-card-title">🗓️ Day 3（08/30）澳門 — 詳細</div>
+      <div class="b-row"><span>路氹城巴士（利澳→官也街）</span><span class="bv">MOP$6</span></div>
+      <div class="b-row"><span>世紀咖啡早餐</span><span class="bv">~MOP$60</span></div>
+      <div class="b-row"><span>安德魯蛋塔（2個）</span><span class="bv">MOP$30</span></div>
+      <div class="b-row"><span>巴士至利澳取行李</span><span class="bv">MOP$6</span></div>
+      <div class="b-row"><span>MT1巴士至機場</span><span class="bv">MOP$6</span></div>
+      <div class="b-total"><span>Day 3 小計</span><span class="bv">~MOP$108 (~HK$105)</span></div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">💡 省錢小提醒</div>
+      <div class="info-item"><span class="ii">🆓</span><span class="it">大館、半山扶梯、路氹夜景噴泉秀、奢華飯店大廳均 <strong>免費</strong></span></div>
+      <div class="info-item"><span class="ii">🚌</span><span class="it">澳門大型酒店均有<strong>免費穿梭巴士</strong>，善加利用省交通費</span></div>
+      <div class="info-item"><span class="ii">🏪</span><span class="it">手信在 <strong>大三巴街</strong> 買比機場便宜，記得貨比三家</span></div>
+      <div class="info-item"><span class="ii">💴</span><span class="it">澳門用港幣消費匯率1:1最划算，無需特別換澳門幣</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ BOTTOM NAV ════════════════ -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="showPage('itinerary',this)">
+    <div class="nav-icon">🗓️</div><div class="nav-label">行程</div>
+  </button>
+  <button class="nav-btn" onclick="showPage('transport',this)">
+    <div class="nav-icon">🚇</div><div class="nav-label">交通</div>
+  </button>
+  <button class="nav-btn" onclick="showPage('hotel',this)">
+    <div class="nav-icon">🏨</div><div class="nav-label">住宿</div>
+  </button>
+  <button class="nav-btn" onclick="showPage('packing',this)">
+    <div class="nav-icon">🧳</div><div class="nav-label">行李</div>
+  </button>
+  <button class="nav-btn" onclick="showPage('budget',this)">
+    <div class="nav-icon">💰</div><div class="nav-label">預算</div>
+  </button>
+</nav>
+
+<button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
 <script>
-const { createApp, ref, computed } = Vue;
-
-createApp({
-    setup() {
-        const activeTab = ref('itinerary');
-        const selectedDay = ref(0);
-        
-        const tabs = [
-            { id: 'itinerary', name: '導航行程', icon: '🗺️' },
-            { id: 'info', name: '詳細資訊', icon: '🏨' },
-            { id: 'luggage', name: '行李清單', icon: '🧳' },
-            { id: 'tips', name: '大師叮嚀', icon: '👨‍🏫' }
-        ];
-
-        const days = [
-            { date: "28", week: "AUG (五)" },
-            { date: "29", week: "AUG (六)" },
-            { date: "30", week: "AUG (日)" }
-        ];
-
-        const itineraryData = ref([
-            // --- DAY 1 ---
-            { id: 1, day: 0, type: 'flight', code: '✈️ HB703', from: 'TPE', to: 'HKG', depTime: '11:30', arrTime: '13:30', duration: '2h 0m' },
-            { id: 2, day: 0, time: '14:30', icon: '🛍️', title: '機場 ➔ 東薈城', travelTime: '15分', travelMethod: 'S1 巴士', steps: [
-                "1. 出關後找『往市區地面運輸中心』大箭頭", "2. 走出大樓『右轉』到底，找 S1 站牌", "3. 下車站：終點站東薈城總站", "4. 營業時間 10:00-22:00；B2/B3層有寄物櫃"
-            ]},
-            { id: 3, day: 0, time: '17:00', icon: '🏨', title: '入住旭逸酒店', travelTime: '45分', travelMethod: 'E32 巴士', steps: [
-                "1. 東薈城總站搭 E32 (往葵芳)", "2. 『葵興站總站』下車", "3. 過馬路到葵興路 7-11 門口搭酒店白色接駁車"
-            ]},
-            { id: 4, day: 0, time: '18:30', icon: '🍖', title: '竺扶大班燒味', travelTime: '40分', travelMethod: '地鐵', steps: [
-                "1. 葵興站(紅線往中環) ➔ 金鐘(換藍線) ➔ 灣仔 A3 出口", "2. 出站『右轉』沿莊士敦道走 3 分鐘", "3. 看到『三角街』左轉即抵達"
-            ], recommend: "必點：厚切叉燒、燒肉", cost: "約 HKD 120/人" },
-            { id: 5, day: 0, time: '19:45', icon: '🚋', title: '叮叮車 ➔ 半山扶梯', travelTime: '20分', travelMethod: '叮叮車', steps: [
-                "1. 走回大馬路找『巴路士街站』搭『西行』叮叮", "2. 在『租庇利街 25W 站』下車", "3. 對面就是『中環街市』，順著指標走進去就是扶梯起點"
-            ], cost: "HKD 3.0" },
-            { id: 21, day: 0, time: '20:15', icon: '🏛️', title: '大館 & 蘇豪區行程', travelTime: '15分', travelMethod: '步行', steps: [
-                "1. 沿手扶梯上行，從「荷李活道」出口下", "2. 參觀大館紅磚建築 (戶外空間至 23:00)", "3. 漫步蘇豪區感受異國風情"
-            ]},
-            { id: 6, day: 0, time: '21:00', icon: '🚡', title: '纜車站 ➔ 山頂', travelTime: '25分', travelMethod: '步行+纜車', steps: [
-                "1. 從蘇豪區沿著皇后大道中步行往花園道方向", "2. 看到聖約翰座堂後，右手邊斜坡即為纜車站入口", "3. 刷八達通進站，上車『坐右邊』風景較佳"
-            ]},
-            { id: 7, day: 0, time: '21:45', icon: '🚌', title: '山頂下山 ➔ 中環碼頭', travelTime: '30分', travelMethod: '15 號巴士', steps: [
-                "1. 走出凌霄閣，前往『山頂巴士總站』", "2. 搭乘 15 號巴士 (往中環 5 號碼頭)", "3. 於終點站下車，前方即為碼頭區域"
-            ]},
-            { id: 8, day: 0, time: '22:30', icon: '🚢', title: '天星小輪 ➔ 佳佳甜品', travelTime: '40分', travelMethod: '渡輪+步行', steps: [
-                "1. 中環 7 碼頭搭乘輪船至尖沙咀 (渡輪運行至 23:30)", "2. 此為維港夜景最美路段，務必拍照", "3. 下船後沿廣東道步行，右轉寧波街", "4. 看到排隊人群即抵達佳佳甜品"
-            ], recommend: "必點：芝麻糊、湯丸", openTime: "至 03:30" },
-            { id: 9, day: 0, time: '23:30', icon: '🍻', title: '樂酒場 (白加士街)', travelTime: '5分', steps: [
-                "1. 佳佳甜品走出後轉彎即為白加士街", "2. 位於白加士街與寧波街交界附近巷內"
-            ]},
-
-            // --- DAY 2 ---
-            { id: 10, day: 1, time: '09:30', icon: '🥟', title: '太子一點心 ➔ 寄行李', steps: [
-                "1. 葵興站搭至太子站 C2 出口", "2. 出站直行 5 分鐘至通菜街『一點心』領號碼牌", "3. 轉彎至上海街 695 號門市(港澳快線)寄放行李"
-            ], recommend: "炸鮮奶、蝦餃", openTime: "10:00 開門" },
-            { id: 11, day: 1, time: '11:30', icon: '🛍️', title: '中環採買：兆成行+珍妮+蘭芳園', travelTime: '30分', travelMethod: '地鐵', steps: [
-                "1. 太子站搭至上環站 E2 出口", "2. 前往『兆成行』(禧利街) 買精油", "3. 步行至永和街『珍妮曲奇』(Jenny Bakery)", "4. 步行至結志街『蘭芳園』買絲襪奶茶"
-            ], recommend: "蘭芳園：絲襪奶茶/菠蘿油", cost: "珍妮小盒約 HKD 100+" },
-            { id: 12, day: 1, time: '14:30', icon: '🚌', title: '港澳快線 ➔ 澳門', travelTime: '2.5小時', steps: [
-                "1. 回到太子門市領行李並報到 (需提早20分)", "2. 大橋海關需『全體攜行李下車』過關，再上原車", "3. 於澳門『回力站』下車", "4. 步行約 10 分鐘抵達利澳酒店 (Rio Hotel)"
-            ]},
-            { id: 13, day: 1, time: '17:30', icon: '🏛️', title: '大三巴區域 (白癡路線)', steps: [
-                "1. 酒店門口搭乘 3 號巴士至『新馬路』站", "2. 步行 10 分鐘至『大三巴牌坊』", "3. 步行 5 分鐘至『最香餅家』買杏仁餅", "4. 步行至『禮記雪糕』吃三色雪糕磚"
-            ]},
-            { id: 14, day: 1, time: '20:00', icon: '🎡', title: '路氹夜景 (8字車/永利纜車)', steps: [
-                "1. 轉搭 25/26A 巴士至『新濠影匯』坐 8 字摩天輪", "2. 摩天輪可俯瞰巴黎人燈光秀", "3. 搭乘輕軌或步行至『永利皇宮』搭乘免費纜車", "4. 噴泉秀每 20 分一場，看噴泉水舞最壯觀"
-            ]},
-            { id: 15, day: 1, time: '22:00', icon: '🥣', title: '杏香園 (清平店)', steps: [
-                "1. 從路氹搭巴士回到『新馬路/清平街』老店", "2. 必點：蛋白夾心杏仁茶、核桃露"
-            ]},
-
-            // --- DAY 3 ---
-            { id: 16, day: 2, time: '10:00', icon: '🛎️', title: '退房 ➔ 飯店寄行李', steps: [
-                "1. 10:00 利澳退房，行李直接存放在飯店櫃檯", "2. 輕裝搭巴士前往官也街"
-            ]},
-            { id: 17, day: 2, time: '11:00', icon: '☕', title: '官也街早餐：世紀咖啡', steps: [
-                "1. 搭乘巴士至『官也街』站下車", "2. 世紀咖啡必點：炭燒瓦煲奶茶、豬扒包", "3. 備案：『喜蓮咖啡』(紅豆冰、乾炒牛通)"
-            ], openTime: "11:00 開門" },
-            { id: 18, day: 2, time: '13:00', icon: '🥧', title: '蛋塔與奢華飯店循環', steps: [
-                "1. 步行至地堡街『安德魯蛋塔』購買", "2. 步行遊覽『威尼斯人』➔ 『倫敦人』➔ 『美高梅 MGM』", "3. 若 19:30 前往機場，中間空檔可去『上葡京』花園"
-            ]},
-            { id: 19, day: 2, time: '17:30', icon: '🧳', title: '取回行李 ➔ 機場', steps: [
-                "1. 從路氹搭巴士回到利澳飯店取回行李", "2. 飯店門口搭巴士或預約計程車前往機場", "3. 預留 2 小時抵達機場辦理登機"
-            ]},
-            { id: 20, day: 2, type: 'flight', code: '✈️ JX206', from: 'MFM', to: 'TPE', depTime: '20:50', arrTime: '22:40', duration: '1h 50m' }
-        ]);
-
-        const luggageCategories = [
-            { name: "🔴 必要證件與金流", color: "text-red-400", items: [
-                { name: "護照 + 港簽/台胞證", note: "港簽需預先列印紙本" },
-                { name: "港澳快線 QR Code", note: "截圖至手機相簿備用" },
-                { name: "現金 (HKD/MOP)", note: "老店只收現金，不收千元大鈔" },
-                { name: "八達通/澳門通", note: "出發前確認每張餘額足夠" }
-            ]},
-            { name: "🔵 個人衛生與清潔", color: "text-blue-400", items: [
-                { name: "小包面紙 x 10", note: "餐廳多不提供免費面紙" },
-                { name: "濕紙巾/乾洗手", note: "手抓食物後清潔必備" },
-                { name: "牙刷/牙膏組", note: "部分飯店為響應環保不主動提供" },
-                { name: "免洗內褲/襪子", note: "三天份，節省回程行李空間" }
-            ]},
-            { name: "🟡 醫療救急 (暴食必備)", color: "text-yellow-400", items: [
-                { name: "太田胃散/胃藥", note: "吃喝團靈魂，解決暴食負擔" },
-                { name: "止痛藥/感冒藥", note: "應對地鐵與室外溫差" },
-                { name: "休足時間", note: "Day 2 大量步行後睡前使用" },
-                { name: "個人藥品", note: "慢性病藥或是保健品" }
-            ]},
-            { name: "🟢 電子設備", color: "text-green-400", items: [
-                { name: "英規轉接頭 x 3", note: "港澳皆使用三腳平頭插座" },
-                { name: "行動電源", note: "全天導航極耗電，務必隨身帶" },
-                { name: "多孔充電頭", note: "5 人團體充電需求大" }
-            ]}
-        ];
-
-        const expertTips = [
-            { title: "【行】交通重點", icon: "🚌", color: "#60a5fa", content: [
-                "機場快綫櫃檯：可進行八達通儲值或購買新卡。",
-                "港澳快線：過大橋海關時『需攜帶所有行李下車過關』，過完關再憑票根回原車，5人同行建議由一人保管票根避免遺失。",
-                "香港巴士：下車務必提早按鈴。5人移動建議預留更多上下車時間。",
-                "澳門巴士：一律不找零，建議使用澳門通或備妥零錢。",
-                "步行導航：香港路標清晰，但地下道多，注意 Google Map 的出口提示。"
-            ]},
-            { title: "【食】用餐法則", icon: "🥢", color: "#f87171", content: [
-                "併桌文化：5人用餐極大機率會被拆開或在4人桌擠5人。",
-                "洗筷子茶：第一杯熱茶是用來燙洗餐具的盆子，不要誤喝。",
-                "快節奏：茶餐廳看好菜單後直接舉手召喚服務生，避免猶豫。"
-            ]},
-            { title: "【買】伴手禮提醒", icon: "🛍️", color: "#fbbf24", content: [
-                "兆成行：精油液體務必妥善包裹，避免在行李中外洩。",
-                "最香餅家：現做杏仁餅產量有限，如遇完售請參考其他分店。",
-                "珍妮曲奇：現金交易為主，不提供塑膠袋，建議自備提袋。"
-            ]}
-        ];
-
-        const currentItinerary = computed(() => itineraryData.value.filter(i => i.day === selectedDay.value));
-
-        return { activeTab, selectedDay, tabs, days, currentItinerary, luggageCategories, expertTips };
-    }
-}).mount('#app');
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showDay(i) {
+  document.querySelectorAll('.day-content').forEach((el,j) => el.classList.toggle('active', i===j));
+  document.querySelectorAll('.day-tab').forEach((el,j) => el.classList.toggle('active', i===j));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function tog(hd) {
+  const bd = hd.nextElementSibling;
+  const ic = hd.querySelector('.tog');
+  bd.classList.toggle('open');
+  ic.classList.toggle('open');
+}
+function chk(item) {
+  const cb = item.querySelector('.pack-cb');
+  const lb = item.querySelector('.pack-label');
+  cb.classList.toggle('checked');
+  lb.classList.toggle('checked');
+}
 </script>
-
 </body>
 </html>
